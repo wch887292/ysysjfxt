@@ -108,6 +108,11 @@ read_docx.py
 fix_docx.py
 review_100.py
 ps_syntax_check.txt
+# 会话级临时文件（含网络重试脚本与 API 请求体）
+.retry_ci.sh
+.push*.log
+.protection.json
+.push2.log
 
 # ---------- 商业授权与安全文档（公开仓库严禁携带） ----------
 # 授权激活机制（60天试用/密钥激活/5层防破解）与安全审计漏洞细节，入库将暴露破解路径
