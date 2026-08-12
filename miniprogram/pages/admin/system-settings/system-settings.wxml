@@ -1,0 +1,83 @@
+<!-- pages/admin/system-settings/system-settings.wxml -->
+<view class="container">
+  <!-- 分类标签栏 -->
+  <view class="category-tabs">
+    <view
+      wx:for="{{categories}}"
+      wx:key="*this"
+      class="tab-item {{currentCategory === item ? 'active' : ''}}"
+      data-category="{{item}}"
+      bindtap="onCategoryChange"
+    >
+      {{categoryLabels[item]}}
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+
+  <!-- 配置列表 -->
+  <view wx:elif="{{settings[currentCategory] && settings[currentCategory].length > 0}}" class="settings-list">
+    <view
+      wx:for="{{settings[currentCategory]}}"
+      wx:key="key"
+      class="setting-item"
+    >
+      <view class="item-header">
+        <view class="item-label">{{item.label}}</view>
+        <view class="item-badges">
+          <view wx:if="{{item.sensitive}}" class="badge badge-sensitive">敏感</view>
+          <view class="badge badge-{{item.source}}">{{item.source === 'database' ? '数据库' : '环境变量'}}</view>
+        </view>
+      </view>
+      <view class="item-value">
+        <text class="value-text {{item.sensitive ? 'value-masked' : ''}}">{{item.value || '未配置'}}</text>
+      </view>
+      <view class="item-desc">{{item.description}}</view>
+      <view class="item-actions">
+        <button
+          class="btn btn-edit"
+          data-key="{{item.key}}"
+          data-label="{{item.label}}"
+          data-sensitive="{{item.sensitive}}"
+          data-type="{{item.type}}"
+          bindtap="onEditItem"
+        >修改</button>
+        <button
+          wx:if="{{item.source === 'database'}}"
+          class="btn btn-clear"
+          data-key="{{item.key}}"
+          data-label="{{item.label}}"
+          bindtap="onClearItem"
+        >清除</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-state">暂无配置项</view>
+</view>
+
+<!-- 编辑弹窗 -->
+<view wx:if="{{showEditModal}}" class="modal-mask" bindtap="onCancelEdit">
+  <view class="modal-content" catchtap="">
+    <view class="modal-title">修改「{{editingLabel}}」</view>
+    <view wx:if="{{editingSensitive}}" class="modal-warn">
+      ⚠️ 此为敏感配置，新值将加密存储。输入后不会显示明文。
+    </view>
+    <view class="form-group">
+      <view class="form-label">新值</view>
+      <input
+        class="form-input"
+        type="{{editingType === 'number' ? 'digit' : 'text'}}"
+        placeholder="{{editingSensitive ? '请输入新的密钥值' : '请输入新值'}}"
+        value="{{editingValue}}"
+        bindinput="onValueInput"
+      />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-secondary" bindtap="onCancelEdit">取消</button>
+      <button class="btn btn-primary" bindtap="onConfirmSave" disabled="{{saving}}">{{saving ? '保存中...' : '确认保存'}}</button>
+    </view>
+  </view>
+</view>

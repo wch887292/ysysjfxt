@@ -1,0 +1,60 @@
+<view class="container">
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-tip" wx:elif="{{!userInfo}}">
+    <text>未找到用户信息</text>
+  </view>
+
+  <!-- 主内容 -->
+  <block wx:else>
+    <!-- 用户信息卡片 -->
+    <view class="user-card">
+      <image class="user-avatar" src="{{userInfo.avatar_url || defaultAvatar}}" mode="aspectFill"></image>
+      <view class="user-detail">
+        <text class="user-name">{{userInfo.nick_name || '未知用户'}}</text>
+        <text class="user-role">当前身份：{{userInfo.role === 'member' ? '会员' : '普通用户'}}</text>
+        <text class="user-date">注册日期：{{userInfo.created_at || '未知'}}</text>
+      </view>
+    </view>
+
+    <!-- 会员权益说明 -->
+    <view class="benefits-section">
+      <text class="section-title">会员权益</text>
+      <view class="benefit-item">
+        <text class="benefit-icon">✓</text>
+        <text class="benefit-text">专属健康调理方案</text>
+      </view>
+      <view class="benefit-item">
+        <text class="benefit-icon">✓</text>
+        <text class="benefit-text">积分加倍获取</text>
+      </view>
+      <view class="benefit-item">
+        <text class="benefit-icon">✓</text>
+        <text class="benefit-text">礼品兑换优先权</text>
+      </view>
+      <view class="benefit-item">
+        <text class="benefit-icon">✓</text>
+        <text class="benefit-text">一对一健康顾问服务</text>
+      </view>
+    </view>
+
+    <!-- 转化成功状态 -->
+    <view class="success-section" wx:if="{{converted}}">
+      <text class="success-icon">✓</text>
+      <text class="success-text">转化成功，该用户已成为会员</text>
+    </view>
+
+    <!-- 转化按钮 -->
+    <button class="btn-convert"
+      wx:if="{{!converted}}"
+      bindtap="handleConvert"
+      hover-class="btn-convert-hover"
+      disabled="{{converting || userInfo.role === 'member'}}">
+      {{converting ? '转化中...' : (userInfo.role === 'member' ? '已是会员' : '确认转化为会员')}}
+    </button>
+  </block>
+</view>

@@ -1,0 +1,52 @@
+<!--pages/admin/orders/orders.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="search-box">
+      <input class="search-input" placeholder="搜索订单号" value="{{searchKeyword}}" bindinput="onSearchInput" bindconfirm="onSearch" />
+      <button class="btn-search" bindtap="onSearch" hover-class="btn-hover">搜索</button>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="subtitle">订单列表</text>
+
+    <view wx:if="{{orders.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{orders}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-order-no">{{item.order_no}}</text>
+          <text class="item-tag status-{{item.status}}">{{item.status === 'pending' ? '待付款' : item.status === 'paid' ? '已付款' : item.status === 'completed' ? '已完成' : item.status === 'refunded' ? '已退款' : item.status}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">用户：{{item.user_id}} ｜ 金额：¥{{item.amount}}</text>
+          <text class="info-text">创建时间：{{item.created_at || '-'}}</text>
+        </view>
+        <view class="item-actions" wx:if="{{item.status === 'paid' || item.status === 'completed'}}">
+          <button class="btn-action btn-danger" data-id="{{item.id}}" data-orderno="{{item.order_no}}" bindtap="onRefund" hover-class="btn-hover">退款</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无订单数据</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 退款弹窗 -->
+<view class="modal-mask" wx:if="{{showRefundModal}}" bindtap="onCancelRefund">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">退款</text>
+    <view class="form-group">
+      <text class="form-label">退款原因</text>
+      <textarea class="form-textarea" placeholder="请输入退款原因" value="{{refundReason}}" bindinput="onRefundReasonInput" auto-height />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmRefund" hover-class="btn-hover">确认退款</button>
+      <button class="btn btn-secondary" bindtap="onCancelRefund" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

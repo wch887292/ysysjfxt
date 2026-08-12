@@ -1,0 +1,72 @@
+<!--pages/admin/articles/articles.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="flex-between">
+      <text class="subtitle">资讯管理</text>
+      <button class="btn-add" bindtap="onShowCreate" hover-class="btn-hover">+ 创建文章</button>
+    </view>
+
+    <view wx:if="{{articles.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{articles}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-title">{{item.title}}</text>
+          <text class="item-tag status-{{item.status}}">{{item.status === 'draft' ? '草稿' : item.status === 'published' ? '已发布' : item.status}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">创建时间：{{item.created_at || '-'}}</text>
+        </view>
+        <view class="item-actions">
+          <button class="btn-action" data-item="{{item}}" bindtap="onEditArticle" hover-class="btn-hover">编辑</button>
+          <button wx:if="{{item.status !== 'published'}}" class="btn-action btn-publish" data-id="{{item.id}}" bindtap="onPublishArticle" hover-class="btn-hover">发布</button>
+          <button class="btn-action btn-danger" data-id="{{item.id}}" data-title="{{item.title}}" bindtap="onDeleteArticle" hover-class="btn-hover">删除</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无文章</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 创建文章弹窗 -->
+<view class="modal-mask" wx:if="{{showCreateModal}}" bindtap="onCancelCreate">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">创建文章</text>
+    <view class="form-group">
+      <text class="form-label">标题</text>
+      <input class="form-input" placeholder="请输入标题" value="{{newArticle.title}}" data-field="title" bindinput="onCreateInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">内容</text>
+      <textarea class="form-textarea" placeholder="请输入内容" value="{{newArticle.content}}" data-field="content" bindinput="onCreateInput" auto-height />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onCreateArticle" hover-class="btn-hover">确认创建</button>
+      <button class="btn btn-secondary" bindtap="onCancelCreate" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 编辑文章弹窗 -->
+<view class="modal-mask" wx:if="{{showEditModal}}" bindtap="onCancelEdit">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">编辑文章</text>
+    <view class="form-group">
+      <text class="form-label">标题</text>
+      <input class="form-input" placeholder="请输入标题" value="{{editTitle}}" bindinput="onEditTitleInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">内容</text>
+      <textarea class="form-textarea" placeholder="请输入内容" value="{{editContent}}" bindinput="onEditContentInput" auto-height />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmEdit" hover-class="btn-hover">保存</button>
+      <button class="btn btn-secondary" bindtap="onCancelEdit" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

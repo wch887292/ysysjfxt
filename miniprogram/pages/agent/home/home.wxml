@@ -1,0 +1,90 @@
+<!--pages/agent/home/home.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="title">代理商控制台</text>
+  </view>
+
+  <!-- 统计数据 -->
+  <view class="card">
+    <view class="stats-grid">
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.totalUsers}}</text>
+        <text class="stat-label">总用户数</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.activeUsers}}</text>
+        <text class="stat-label">活跃用户</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.totalPoints}}</text>
+        <text class="stat-label">总积分</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.todayUploads}}</text>
+        <text class="stat-label">今日上传</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="card">
+    <text class="subtitle">快捷操作</text>
+    <view class="quick-actions">
+      <view class="action-item" bindtap="navigateToUsers" hover-class="action-hover">
+        <text class="action-icon">👥</text>
+        <text class="action-text">用户管理</text>
+      </view>
+      <view class="action-item" bindtap="navigateToReview" hover-class="action-hover">
+        <text class="action-icon">✅</text>
+        <text class="action-text">餐食审核</text>
+      </view>
+      <view class="action-item" bindtap="navigateToStatistics" hover-class="action-hover">
+        <text class="action-icon">📊</text>
+        <text class="action-text">数据统计</text>
+      </view>
+      <view class="action-item" bindtap="navigateToWriteOff" hover-class="action-hover">
+        <text class="action-icon">💳</text>
+        <text class="action-text">积分核销</text>
+      </view>
+      <view class="action-item" bindtap="navigateToCommissions" hover-class="action-hover">
+        <text class="action-icon">💰</text>
+        <text class="action-text">分润查询</text>
+      </view>
+      <view class="action-item" bindtap="navigateToPosts" hover-class="action-hover">
+        <text class="action-icon">📢</text>
+        <text class="action-text">信息发布</text>
+      </view>
+      <view class="action-item" bindtap="navigateToReportEdit" hover-class="action-hover">
+        <text class="action-icon">📝</text>
+        <text class="action-text">报告编辑</text>
+      </view>
+      <view class="action-item" bindtap="navigateToReportDownload" hover-class="action-hover">
+        <text class="action-icon">📄</text>
+        <text class="action-text">报告下载</text>
+      </view>
+      <view class="action-item" bindtap="navigateToQrcode" hover-class="action-hover">
+        <text class="action-icon">🔗</text>
+        <text class="action-text">拉新二维码</text>
+      </view>
+      <view class="action-item" bindtap="navigateToConvertMember" hover-class="action-hover">
+        <text class="action-icon">🎖️</text>
+        <text class="action-text">会员转化</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近活动 -->
+  <view class="card">
+    <text class="subtitle">最近活动</text>
+    <view wx:if="{{recentActivities.length > 0}}" class="activity-list">
+      <view class="activity-item" wx:for="{{recentActivities}}" wx:key="id">
+        <text class="activity-desc">{{item.description}}</text>
+        <text class="activity-time">{{item.time}}</text>
+      </view>
+    </view>
+    <view wx:else class="empty-state">
+      <text class="empty-icon">📝</text>
+      <text>暂无活动记录</text>
+    </view>
+  </view>
+</view>

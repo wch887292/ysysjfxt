@@ -1,0 +1,54 @@
+<!--pages/admin/points/points.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="flex-between">
+      <text class="subtitle">积分历史</text>
+      <button class="btn-add" bindtap="onShowAdjust" hover-class="btn-hover">+ 积分调整</button>
+    </view>
+
+    <view wx:if="{{history.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{history}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-name">用户 {{item.user_id}}</text>
+          <text class="item-amount {{item.amount > 0 ? 'amount-positive' : 'amount-negative'}}">{{item.amount > 0 ? '+' : ''}}{{item.amount}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">类型：{{item.type || '-'}} ｜ 余额：{{item.balance_after || '-'}}</text>
+          <text class="info-text">说明：{{item.reason || '-'}}</text>
+          <text class="info-text">时间：{{item.created_at || '-'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无积分记录</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 积分调整弹窗 -->
+<view class="modal-mask" wx:if="{{showAdjustModal}}" bindtap="onCancelAdjust">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">积分调整</text>
+    <view class="form-group">
+      <text class="form-label">用户ID</text>
+      <input class="form-input" placeholder="请输入用户ID" value="{{adjustUserId}}" bindinput="onAdjustUserIdInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">调整数量（正数增加，负数扣除）</text>
+      <input class="form-input" type="number" placeholder="如 +100 或 -50" value="{{adjustAmount}}" bindinput="onAdjustAmountInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">调整原因</text>
+      <textarea class="form-textarea" placeholder="请输入调整原因" value="{{adjustReason}}" bindinput="onAdjustReasonInput" auto-height />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmAdjust" hover-class="btn-hover">确认调整</button>
+      <button class="btn btn-secondary" bindtap="onCancelAdjust" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

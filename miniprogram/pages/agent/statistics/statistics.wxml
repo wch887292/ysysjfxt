@@ -1,0 +1,42 @@
+<!--pages/agent/statistics/statistics.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="title">运营数据概览</text>
+  </view>
+
+  <view class="card" wx:if="{{!loading}}">
+    <view class="stats-grid">
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.totalUsers}}</text>
+        <text class="stat-label">名下总用户</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.activeUsers}}</text>
+        <text class="stat-label">今日活跃</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.totalPoints}}</text>
+        <text class="stat-label">累计积分</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.todayUploads}}</text>
+        <text class="stat-label">今日上传</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{!loading}}">
+    <text class="subtitle">用户活跃率</text>
+    <view class="rate-row">
+      <view class="rate-bar">
+        <view class="rate-fill" style="width: {{activeRate}};"></view>
+      </view>
+      <text class="rate-text">{{activeRate}}</text>
+    </view>
+    <text class="rate-tip">活跃率 = 今日活跃用户 / 名下总用户</text>
+  </view>
+
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

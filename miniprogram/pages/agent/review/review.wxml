@@ -1,0 +1,36 @@
+<view class="container">
+  <!-- 状态筛选 -->
+  <view class="tab-bar">
+    <view class="tab-item {{statusFilter === item.value ? 'tab-active' : ''}}"
+      wx:for="{{statusTabs}}" wx:key="value"
+      data-status="{{item.value}}" bindtap="switchTab" hover-class="tab-hover">
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 餐食列表 -->
+  <view class="meal-list">
+    <view class="meal-card" wx:for="{{meals}}" wx:key="id" hover-class="card-hover">
+      <view class="meal-header">
+        <text class="meal-user">{{item.userName}}</text>
+        <text class="meal-type">{{item.mealType}}</text>
+      </view>
+      <image class="meal-image" wx:if="{{item.imageUrl}}" src="{{item.imageUrl}}" mode="aspectFill"></image>
+      <view class="meal-info">
+        <text class="meal-ai" wx:if="{{item.aiFoodType}}">AI识别: {{item.aiFoodType}}</text>
+        <text class="meal-points">积分: +{{item.points}}</text>
+      </view>
+      <view class="meal-actions" wx:if="{{statusFilter === 'pending'}}">
+        <button class="btn-reject" data-id="{{item.id}}" bindtap="reject">驳回</button>
+        <button class="btn-approve" data-id="{{item.id}}" bindtap="approve">通过</button>
+      </view>
+    </view>
+
+    <view class="empty-tip" wx:if="{{meals.length === 0 && !loading}}">
+      <text>暂无{{statusFilter === 'pending' ? '待审核' : ''}}餐食记录</text>
+    </view>
+    <view class="loading-tip" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

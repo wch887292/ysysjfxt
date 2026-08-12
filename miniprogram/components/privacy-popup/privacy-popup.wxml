@@ -1,0 +1,31 @@
+<!-- components/privacy-popup/privacy-popup.wxml -->
+<view wx:if="{{show}}" class="privacy-mask">
+  <view class="privacy-dialog">
+    <view class="privacy-header">
+      <text class="privacy-title">隐私提示</text>
+    </view>
+    <view class="privacy-body">
+      <text class="privacy-desc">
+        感谢使用「健康饮食积分」！在您使用前，请仔细阅读
+      </text>
+      <text class="privacy-link" bindtap="viewPrivacy">《隐私政策与免责声明》</text>
+      <text class="privacy-desc">
+        。我们将严格保护您的个人信息和健康数据安全。
+      </text>
+      <view class="privacy-notice">
+        <text class="notice-title">我们会收集以下信息：</text>
+        <text class="notice-item">· 微信昵称和头像（用于身份展示）</text>
+        <text class="notice-item">· 健康数据（问卷、打卡记录）</text>
+        <text class="notice-item">· 积分和兑换记录</text>
+        <text class="notice-title">您可以随时：</text>
+        <text class="notice-item">· 在「隐私设置」中修改信息可见范围</text>
+        <text class="notice-item">· 在「隐私设置」中导出个人数据</text>
+        <text class="notice-item">· 在「隐私设置」中申请删除账号数据</text>
+      </view>
+    </view>
+    <view class="privacy-footer">
+      <button class="btn-agree" bindtap="onAgree">同意并继续</button>
+      <button class="btn-disagree" bindtap="onDisagree">不同意</button>
+    </view>
+  </view>
+</view>

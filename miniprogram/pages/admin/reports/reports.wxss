@@ -1,0 +1,145 @@
+/* pages/admin/reports/reports.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.list {
+  margin-top: 20rpx;
+}
+
+.list-item {
+  background-color: white;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.item-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.item-tag {
+  font-size: 18px;
+  padding: 4rpx 20rpx;
+  border-radius: 20rpx;
+  color: white;
+}
+
+.status-pending {
+  background-color: #FF9800;
+}
+
+.status-approved {
+  background-color: #4CAF50;
+}
+
+.status-rejected {
+  background-color: #F44336;
+}
+
+.item-info {
+  margin-bottom: 16rpx;
+}
+
+.info-text {
+  display: block;
+  font-size: 18px;
+  color: #666;
+  line-height: 1.8;
+}
+
+.item-actions {
+  display: flex;
+  gap: 16rpx;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 24rpx;
+  font-size: 18px;
+  background-color: #f5f5f5;
+  color: #4CAF50;
+  border: 1rpx solid #4CAF50;
+  border-radius: 8rpx;
+}
+
+.btn-warning {
+  color: #F44336;
+  border-color: #F44336;
+}
+
+.btn-orange {
+  color: #FF9800;
+  border-color: #FF9800;
+}
+
+.btn-hover {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  width: 85%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.detail-info {
+  margin-bottom: 32rpx;
+}
+
+.form-textarea {
+  min-height: 120rpx;
+  padding: 16rpx 24rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 18px;
+  line-height: 1.8;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.loading {
+  text-align: center;
+  padding: 40rpx;
+  color: #666;
+}

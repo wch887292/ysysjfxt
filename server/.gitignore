@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.production
+logs/
+uploads/meals/*.jpg
+uploads/meals/*.png
+uploads/meals/*.gif
+*.log
+*.env.txt
+.dev-keys/

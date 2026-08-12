@@ -1,0 +1,23 @@
+import os, paramiko
+HOST=os.environ.get("SSH_HOST","111.229.190.132"); PORT=int(os.environ.get("SSH_PORT","22"))
+USER=os.environ.get("SSH_USER","root"); PW=os.environ.get("SSH_PW","")
+def run(c,cmd,t=30):
+    i,o,e=c.exec_command(cmd,timeout=t); out=o.read().decode("utf-8","replace"); err=e.read().decode("utf-8","replace"); rc=o.channel.recv_exit_status(); return out,err,rc
+c=paramiko.SSHClient(); c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+c.connect(HOST,port=PORT,username=USER,password=PW,timeout=15,look_for_keys=False,allow_agent=False)
+print("=== nginx: rry.klai.top 代理目标 ===")
+out,_,_=run(c,"for f in $(grep -rl 'rry.klai.top' /www/server/panel/vhost/nginx/ 2>/dev/null); do echo \"--- $f ---\"; grep -nE 'proxy_pass|server_name|listen|location' \"$f\" | head -20; done")
+print(out.strip())
+print("=== docker 容器 ===")
+out,_,_=run(c,"docker ps --format '{{.Names}}\\t{{.Ports}}\\t{{.Status}}' 2>/dev/null || echo 'NO DOCKER'")
+print(out.strip())
+print("=== aaPanel Node 项目配置 ===")
+out,_,_=run(c,"ls /www/server/panel/config.json 2>/dev/null && grep -i 'port\\|node' /www/server/panel/config.json 2>/dev/null | head; echo '--- node_projects ---'; ls -la /www/server/panel/data/ 2>/dev/null | head; find /www/server/panel -name '*.json' 2>/dev/null | xargs grep -l 'node' 2>/dev/null | head")
+print(out.strip())
+print("=== 所有 node 监听端口(全量) ===")
+out,_,_=run(c,"for p in $(pgrep -f 'node'); do echo \"pid $p:\"; ss -tlnp 2>/dev/null | grep \"$p\" | head -3; done; echo '--- 若空说明 node 未监听 ---'")
+print(out.strip())
+print("=== 当前 node app.js 打开的文件/网络连接 ===")
+out,_,_=run(c,"ls -l /proc/1840977/fd 2>/dev/null | grep -i socket | head; echo '--- netstat 该pid ---'; cat /proc/1840977/net/tcp 2>/dev/null | head -3")
+print(out.strip())
+c.close()

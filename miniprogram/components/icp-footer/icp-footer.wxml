@@ -1,0 +1,9 @@
+<!-- ICP 备案信息展示组件（工信部要求：小程序须公示备案号） -->
+<view class="icp-footer {{tabbar ? 'icp-footer--tabbar' : ''}}">
+  <view class="icp-line" bindtap="onCopy" hover-class="icp-line-hover">
+    <text class="icp-text" user-select="{{false}}">{{icp}}</text>
+  </view>
+  <view class="icp-line" wx:if="{{company}}">
+    <text class="icp-sub">{{company}}</text>
+  </view>
+</view>

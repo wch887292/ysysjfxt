@@ -1,0 +1,63 @@
+<!--pages/service-provider/users/users.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="search-box">
+      <input
+        class="search-input"
+        placeholder="搜索客户昵称/手机号"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearch"
+      />
+      <button class="btn-search" bindtap="onSearch" hover-class="btn-hover">搜索</button>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="tab-bar">
+      <view
+        class="tab-item {{activeTab === item.value ? 'tab-active' : ''}}"
+        wx:for="{{tabs}}"
+        wx:key="value"
+        data-tab="{{item.value}}"
+        bindtap="switchTab"
+        hover-class="action-hover"
+      >
+        <text>{{item.label}}</text>
+      </view>
+    </view>
+
+    <text class="subtitle">客户列表</text>
+
+    <view wx:if="{{users.length > 0}}" class="user-list">
+      <view
+        class="user-item"
+        wx:for="{{users}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="viewUserDetail"
+        hover-class="item-hover"
+      >
+        <image class="user-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+        <view class="user-info">
+          <text class="user-name">{{item.nickName}}</text>
+          <text class="user-phone">{{item.phone}}</text>
+        </view>
+        <view class="user-stats">
+          <text class="user-points">{{item.points}} 积分</text>
+          <text wx:if="{{activeTab === 'inactive'}}" class="user-inactive">{{item.days_inactive}}天未活跃</text>
+          <text wx:else class="user-active">{{item.lastActiveAt}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text class="empty-icon">👥</text>
+      <text>暂无客户数据</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

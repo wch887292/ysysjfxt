@@ -1,0 +1,102 @@
+/* pages/user/course/list.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.page-header {
+  background: white;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.page-title {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 18px;
+  color: #666;
+}
+
+.loading-tip,
+.empty-tip {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  padding: 60rpx 0;
+}
+
+.course-card {
+  display: flex;
+  background: white;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  align-items: center;
+}
+
+.course-cover {
+  width: 200rpx;
+  height: 150rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+  background-color: #f0f0f0;
+}
+
+.course-info {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 150rpx;
+}
+
+.course-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  line-height: 1.8;
+}
+
+.course-duration {
+  font-size: 18px;
+  color: #666;
+}
+
+.course-progress {
+  display: flex;
+  align-items: center;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 16rpx;
+  background-color: #f0f0f0;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-right: 16rpx;
+}
+
+.progress-inner {
+  height: 100%;
+  width: var(--progress, 0%);
+  background-color: #4CAF50;
+  border-radius: 8rpx;
+}
+
+.progress-text {
+  font-size: 18px;
+  color: #4CAF50;
+  font-weight: bold;
+  min-width: 80rpx;
+  text-align: right;
+}

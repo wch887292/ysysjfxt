@@ -1,0 +1,90 @@
+/* pages/user/support/support.wxss */
+.container {
+  padding: 32rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.phone-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 48rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.phone-title {
+  font-size: 40rpx;
+  color: #333333;
+  line-height: 1.8;
+}
+
+.phone-number {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #4CAF50;
+  line-height: 1.8;
+}
+
+.phone-time {
+  font-size: 36rpx;
+  color: #666666;
+  margin-bottom: 32rpx;
+}
+
+.call-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  background: #4CAF50;
+  color: #ffffff;
+  font-size: 40rpx;
+  border-radius: 16rpx;
+}
+
+.section-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333333;
+  margin: 40rpx 0 24rpx;
+  line-height: 1.8;
+}
+
+.faq-list {
+  background: #ffffff;
+  border-radius: 16rpx;
+}
+
+.faq-item {
+  padding: 32rpx;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 64rpx;
+}
+
+.faq-q-text {
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: bold;
+  line-height: 1.8;
+  flex: 1;
+}
+
+.faq-arrow {
+  font-size: 36rpx;
+  color: #666666;
+  margin-left: 16rpx;
+}
+
+.faq-answer {
+  margin-top: 16rpx;
+  font-size: 36rpx;
+  color: #666666;
+  line-height: 1.8;
+}

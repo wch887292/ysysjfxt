@@ -1,0 +1,86 @@
+# Node modules (in host, will be installed in container)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+README_zh.md
+*.md
+
+# IDE and editor config
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Environment files
+# 注意：.env.* 只能匹配以 ".env." 开头的文件，无法拦截
+# "xxx.env.txt"、"config副本.txt" 这类备份命名，必须单独列出，
+# 否则明文密钥会被 COPY 进镜像层并随镜像分发（镜像层不可删除，历史层仍可提取）。
+.env
+.env.*
+.env.local
+.env.production
+.env.development
+*.env
+*.env.txt
+*.env.bak
+*.bak
+*副本*
+*备份*
+*.pem
+*.key
+keys/
+server/keys/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker files (don't copy them into the image)
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Test files
+tests
+test
+*.test.js
+*.spec.js
+
+# Build output (if any)
+dist
+build
+.tmp
+
+# Upload directory (use volume instead)
+uploads
+public/images/gifts
+
+# Miniprogram build output
+miniprogram/dist
+miniprogram/.miniprogram_cache
+
+# Admin web build output
+admin-web/dist
+admin-web/node_modules
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# OS files
+.DS_Store
+Thumbs.db

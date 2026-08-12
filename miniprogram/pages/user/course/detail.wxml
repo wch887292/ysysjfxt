@@ -1,0 +1,49 @@
+<!--pages/user/course/detail.wxml-->
+<view class="container">
+  <block wx:if="{{loading}}">
+    <view class="loading-tip">加载中...</view>
+  </block>
+
+  <block wx:elif="{{course}}">
+    <view class="card">
+      <image class="cover-image" src="{{course.coverImage}}" mode="aspectFill"></image>
+      <text class="course-title">{{course.title}}</text>
+      <view class="course-meta">
+        <text class="meta-item">阅读时长：{{course.duration}}</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <text class="section-title">课程介绍</text>
+      <text class="course-desc">{{course.description}}</text>
+    </view>
+
+    <view class="card">
+      <text class="section-title">学习进度</text>
+      <view class="progress-row">
+        <view class="progress-bar">
+          <view class="progress-inner" style="--progress: {{progress}}%"></view>
+        </view>
+        <text class="progress-text">{{progress}}%</text>
+      </view>
+      <view wx:if="{{progress >= 80}}" class="reward-tip">已获得10积分</view>
+    </view>
+
+    <view class="action-area">
+      <button class="btn btn-primary" bindtap="goRead">开始阅读</button>
+      <view class="history-link" bindtap="goHistory" wx:if="{{historyRecords.length > 0}}">查看学习历史</view>
+    </view>
+
+    <view class="card history-section" wx:if="{{historyRecords.length > 0}}">
+      <text class="section-title">学习历史</text>
+      <view class="history-item" wx:for="{{historyRecords}}" wx:key="id">
+        <text class="history-date">{{item.study_date}}</text>
+        <text class="history-progress">进度 {{item.progress}}%</text>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="empty-tip">课程不存在</view>
+  </block>
+</view>

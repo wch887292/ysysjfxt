@@ -1,0 +1,100 @@
+<wxs module="util">
+function inArray(arr, val) {
+  if (!arr || arr.length === undefined) return false;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] === val) return true;
+  }
+  return false;
+}
+module.exports = { inArray: inArray };
+</wxs>
+<!--pages/user/questionnaire/questionnaire.wxml-->
+<view class="container">
+  <!-- 查看上次评估结果入口 -->
+  <view wx:if="{{hasResult}}" class="result-entry" bindtap="viewResult">
+    <view class="result-entry-text">
+      <text class="result-entry-title">查看上次评估结果</text>
+      <text class="result-entry-desc">您已完成过评估，点击查看危机钩子报告</text>
+    </view>
+    <text class="result-entry-arrow">›</text>
+  </view>
+
+  <!-- 进度条 -->
+  <view class="progress-bar">
+    <view class="progress-fill" style="width: {{(currentStep + 1) / totalSteps * 100}}%"></view>
+    <text class="progress-text">步骤 {{currentStep + 1}} / {{totalSteps}}</text>
+  </view>
+
+  <!-- 声明 -->
+  <view class="declaration">
+    <text>{{declaration}}</text>
+  </view>
+
+  <!-- 问卷内容 -->
+  <view class="card">
+    <text class="title">{{questionnaire[currentStep].title}}</text>
+
+    <view class="questions">
+      <view class="question-item" wx:for="{{questionnaire[currentStep].questions}}" wx:for-item="question" wx:key="id">
+        <text class="question-label">{{question.label}}</text>
+
+        <!-- 数字输入 -->
+        <input
+          wx:if="{{question.type === 'number'}}"
+          class="form-input"
+          type="number"
+          placeholder="{{question.placeholder}}"
+          data-question-id="{{question.id}}"
+          value="{{answers[question.id]}}"
+          bindinput="onInputChange"
+        />
+
+        <!-- 选择器 -->
+        <picker
+          wx:elif="{{question.type === 'picker'}}"
+          mode="selector"
+          range="{{question.options}}"
+          data-question-id="{{question.id}}"
+          bindchange="onPickerChange"
+        >
+          <view class="picker">
+            <text>{{answers[question.id] || '请选择'}}</text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+
+        <!-- 多选框 -->
+        <checkbox-group
+          wx:elif="{{question.type === 'checkbox'}}"
+          data-question-id="{{question.id}}"
+          bindchange="onCheckboxChange"
+        >
+          <view class="checkbox-group">
+            <label class="checkbox-item" wx:for="{{question.options}}" wx:for-item="option" wx:key="*this">
+              <checkbox value="{{option}}" checked="{{util.inArray(answers[question.id], option)}}"/>
+              <text>{{option}}</text>
+            </label>
+          </view>
+        </checkbox-group>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <!-- 规格12.1：最后一步显示隐私授权勾选框 -->
+  <view wx:if="{{currentStep === totalSteps - 1}}" class="consent-section">
+    <checkbox-group bindchange="toggleConsent">
+      <label class="consent-label">
+        <checkbox value="{{true}}" checked="{{consentAccepted}}" />
+        <text>我已阅读并同意</text>
+        <text class="consent-link" catchtap="viewPrivacy">《隐私政策与免责声明》</text>
+      </label>
+    </checkbox-group>
+  </view>
+  <view class="btn-group">
+    <button wx:if="{{currentStep > 0}}" class="btn btn-secondary" bindtap="prevStep">上一步</button>
+    <button class="btn btn-primary" bindtap="nextStep">
+      {{currentStep === totalSteps - 1 ? '提交问卷' : '下一步'}}
+    </button>
+  </view>
+</view>

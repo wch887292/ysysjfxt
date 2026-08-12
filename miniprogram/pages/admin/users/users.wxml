@@ -1,0 +1,91 @@
+<!--pages/admin/users/users.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="search-box">
+      <input class="search-input" placeholder="搜索用户昵称/手机号" value="{{searchKeyword}}" bindinput="onSearchInput" bindconfirm="onSearch" />
+      <button class="btn-search" bindtap="onSearch" hover-class="btn-hover">搜索</button>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="subtitle">用户列表</text>
+
+    <view wx:if="{{users.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{users}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-name">{{item.nick_name || '-'}}</text>
+          <text class="item-tag identity-{{item.identity_type}}">{{item.identity_type === 'vip' ? 'VIP' : '普通'}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">会员：{{item.is_member ? '是' : '否'}} ｜ 积分：{{item.points || 0}}</text>
+          <text class="info-text">荣誉等级：{{item.honor_level || '-'}} ｜ 状态：{{item.status === 'active' ? '正常' : item.status === 'banned' ? '封禁' : item.status}}</text>
+        </view>
+        <view class="item-actions">
+          <button class="btn-action" data-id="{{item.id}}" bindtap="onViewDetail" hover-class="btn-hover">详情</button>
+          <button class="btn-action" data-id="{{item.id}}" data-status="{{item.status}}" bindtap="onEditStatus" hover-class="btn-hover">改状态</button>
+          <button class="btn-action" data-id="{{item.id}}" data-role="{{item.role}}" bindtap="onEditRole" hover-class="btn-hover">改角色</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无用户数据</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 用户详情弹窗 -->
+<view class="modal-mask" wx:if="{{showDetailModal}}" bindtap="onCloseDetail">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">用户详情</text>
+    <view wx:if="{{currentUser}}" class="detail-info">
+      <text class="info-text">昵称：{{currentUser.nick_name || '-'}}</text>
+      <text class="info-text">身份类型：{{currentUser.identity_type || '-'}}</text>
+      <text class="info-text">是否会员：{{currentUser.is_member ? '是' : '否'}}</text>
+      <text class="info-text">积分：{{currentUser.points || 0}}</text>
+      <text class="info-text">荣誉等级：{{currentUser.honor_level || '-'}}</text>
+      <text class="info-text">状态：{{currentUser.status || '-'}}</text>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-secondary" bindtap="onCloseDetail" hover-class="btn-hover">关闭</button>
+    </view>
+  </view>
+</view>
+
+<!-- 修改状态弹窗 -->
+<view class="modal-mask" wx:if="{{showStatusModal}}" bindtap="onCancelStatus">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">修改用户状态</text>
+    <view class="form-group">
+      <text class="form-label">选择状态</text>
+      <picker range="{{['active', 'banned']}}" value="{{selectedStatus}}" bindchange="onStatusChange">
+        <view class="form-input picker-value">{{selectedStatus === 'active' ? '正常' : '封禁'}}</view>
+      </picker>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmStatus" hover-class="btn-hover">确认</button>
+      <button class="btn btn-secondary" bindtap="onCancelStatus" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 修改角色弹窗 -->
+<view class="modal-mask" wx:if="{{showRoleModal}}" bindtap="onCancelRole">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">修改用户角色</text>
+    <view class="form-group">
+      <text class="form-label">选择角色</text>
+      <picker range="{{['user', 'agent', 'service_provider']}}" value="{{selectedRole}}" bindchange="onRoleChange">
+        <view class="form-input picker-value">{{selectedRole === 'user' ? '用户' : selectedRole === 'agent' ? '代理商' : '服务商'}}</view>
+      </picker>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmRole" hover-class="btn-hover">确认</button>
+      <button class="btn btn-secondary" bindtap="onCancelRole" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

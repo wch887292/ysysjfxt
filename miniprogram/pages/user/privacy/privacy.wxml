@@ -1,0 +1,93 @@
+<view class="container">
+  <view class="content-card">
+    <view class="doc-title">隐私政策与免责声明</view>
+
+    <view class="doc-section">
+      <view class="doc-h2">一、重要提示</view>
+      <text class="doc-p">本系统为饮食与生活方式建议工具，不能替代任何医疗诊断、治疗及医嘱。所有健康决策应咨询专业医师。</text>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-h2">二、信息收集与使用</view>
+      <text class="doc-p">1. 您填写的问卷信息仅用于制定个性化饮食与生活方式建议，不构成任何医疗诊断、治疗或处方。</text>
+      <text class="doc-p">2. 我们承诺对您的信息严格保密，健康数据加密存储。</text>
+      <text class="doc-p">3. 本系统支持非实名注册，您可使用昵称注册，无需提供真实姓名。</text>
+      <text class="doc-p">4. 手机号为选填项，仅用于账号找回。</text>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-h2">三、信息可见范围</view>
+      <text class="doc-p">1. 代理商仅可查看其名下客户的信息（脱敏展示）。</text>
+      <text class="doc-p">2. 服务商仅可查看其接待客户的信息。</text>
+      <text class="doc-p">3. 后台展示的敏感信息均经过脱敏处理。</text>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-h2">四、报告说明</view>
+      <text class="doc-p">1. 健康风险评估报告基于您提供的信息进行AI分析生成，结果仅供参考，不作为疾病诊断依据。</text>
+      <text class="doc-p">2. 调理方案为饮食与生活方式建议，仅用于促进健康饮食调整，不作为疾病治疗依据。</text>
+      <text class="doc-p">3. 在采纳任何建议前，尤其涉及健康问题时，请务必咨询专业医师。</text>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-h2">五、您的权利</view>
+      <text class="doc-p">1. 您可以随时设置个人信息的可见范围。</text>
+      <text class="doc-p">2. 您有权要求导出或删除您的个人数据，可通过下方按钮申请办理。</text>
+    </view>
+  </view>
+
+  <!-- 规格7.4：信息可见范围设置 -->
+  <view class="content-card">
+    <view class="doc-h2">六、信息可见范围设置</view>
+    <text class="doc-p">您可控制以下信息对代理商/服务商的可见性。关闭后，对应人员将无法查看该项信息。</text>
+
+    <view class="visibility-list">
+      <view class="visibility-item" bindtap="toggleVisibility" data-key="showProfile" hover-class="item-hover">
+        <view class="visibility-info">
+          <text class="visibility-title">基本资料</text>
+          <text class="visibility-desc">昵称、头像、等级</text>
+        </view>
+        <switch checked="{{visibilitySettings.showProfile}}" data-key="showProfile" bindchange="onSwitchChange" color="#4CAF50"/>
+      </view>
+
+      <view class="visibility-item" bindtap="toggleVisibility" data-key="showPhone" hover-class="item-hover">
+        <view class="visibility-info">
+          <text class="visibility-title">手机号</text>
+          <text class="visibility-desc">代理商/服务商可见（默认关闭）</text>
+        </view>
+        <switch checked="{{visibilitySettings.showPhone}}" data-key="showPhone" bindchange="onSwitchChange" color="#4CAF50"/>
+      </view>
+
+      <view class="visibility-item" bindtap="toggleVisibility" data-key="showHealthData" hover-class="item-hover">
+        <view class="visibility-info">
+          <text class="visibility-title">健康数据</text>
+          <text class="visibility-desc">问卷答案、打卡记录、BMI等</text>
+        </view>
+        <switch checked="{{visibilitySettings.showHealthData}}" data-key="showHealthData" bindchange="onSwitchChange" color="#4CAF50"/>
+      </view>
+
+      <view class="visibility-item" bindtap="toggleVisibility" data-key="showReports" hover-class="item-hover">
+        <view class="visibility-info">
+          <text class="visibility-title">健康报告</text>
+          <text class="visibility-desc">危机钩子报告、7天调理方案</text>
+        </view>
+        <switch checked="{{visibilitySettings.showReports}}" data-key="showReports" bindchange="onSwitchChange" color="#4CAF50"/>
+      </view>
+    </view>
+
+    <view wx:if="{{saveTip}}" class="save-tip">{{saveTip}}</view>
+  </view>
+
+  <!-- 数据权利操作区（规格7.4） -->
+  <view class="data-actions">
+    <button class="action-btn export-btn" bindtap="exportData" loading="{{exporting}}">
+      {{exporting ? '导出中...' : '导出我的数据'}}
+    </button>
+    <button class="action-btn delete-btn" bindtap="requestDeletion">
+      申请删除账号数据
+    </button>
+    <view class="action-tip">
+      <text>数据导出将下载您的全部信息（JSON格式）。删除申请需人工审核，审核通过后3个工作日内完成。</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,437 @@
+/* pages/user/upload/upload.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+}
+
+/* 打卡模式切换 */
+.mode-tabs {
+  display: flex;
+  background: white;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.mode-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx 0;
+  font-size: 18px;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.mode-tab.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.mode-icon {
+  font-size: 36px;
+  margin-bottom: 8rpx;
+}
+
+.mode-text {
+  font-size: 18px;
+}
+
+/* 今日打卡卡片 */
+.today-card {
+  margin-bottom: 20rpx;
+}
+
+.today-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.today-points {
+  font-size: 24px;
+  font-weight: bold;
+  color: #FF9800;
+}
+
+.meals-status {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16rpx;
+}
+
+.meal-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  border-radius: 12rpx;
+  background-color: #fafafa;
+  min-width: 160rpx;
+}
+
+.meal-badge.done {
+  background-color: #e8f5e9;
+  border: 2rpx solid #4CAF50;
+}
+
+.meal-hover {
+  opacity: 0.7;
+  transform: scale(0.96);
+}
+
+.meal-icon {
+  font-size: 32px;
+  margin-bottom: 8rpx;
+}
+
+.meal-label {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 4rpx;
+}
+
+.meal-check {
+  font-size: 18px;
+  color: #666666; /* 7.1.3 对比度修复：#999→#666 */
+}
+
+.meal-badge.done .meal-check {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.today-count {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  margin-top: 8rpx;
+}
+
+/* 通用卡片 */
+.card {
+  background: white;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.form-group {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  font-size: 18px;
+  color: #333;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.form-hint {
+  font-size: 18px;
+  color: #666666; /* 7.1.3 对比度修复：#999→#666 */
+  display: block;
+  margin-top: 12rpx;
+}
+
+/* 图标九宫格 */
+.icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12rpx;
+}
+
+.icon-cell {
+  width: 33.33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 12rpx;
+  margin-right: -2rpx;
+  margin-bottom: -2rpx;
+  box-sizing: border-box;
+  background-color: #fafafa;
+}
+
+.icon-cell.selected {
+  border-color: #4CAF50;
+  background-color: #e8f5e9;
+}
+
+.icon-emoji {
+  font-size: 40px;
+  margin-bottom: 8rpx;
+}
+
+.icon-label {
+  font-size: 18px;
+  color: #333;
+}
+
+/* 上传区域 */
+.upload-area {
+  width: 100%;
+  height: 400rpx;
+  border: 2rpx dashed #ddd;
+  border-radius: 12rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  background-color: #fafafa;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.upload-icon {
+  font-size: 80px;
+  margin-bottom: 20rpx;
+}
+
+.upload-text {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.upload-hint {
+  font-size: 18px;
+  color: #666666; /* 7.1.3 对比度修复：#999→#666 */
+}
+
+/* 遵循饮食计划复选框 */
+.follow-plan-row {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background-color: #fafafa;
+  border-radius: 12rpx;
+}
+
+.checkbox {
+  width: 48rpx;
+  height: 48rpx;
+  border: 2rpx solid #ddd;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.checkbox.checked {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+.checkbox-mark {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.follow-plan-text {
+  flex: 1;
+}
+
+.follow-plan-title {
+  font-size: 18px;
+  color: #333;
+  display: block;
+}
+
+.follow-plan-desc {
+  font-size: 18px;
+  color: #666666; /* 7.1.3 对比度修复：#999→#666 */
+  display: block;
+  margin-top: 4rpx;
+}
+
+/* picker */
+.picker {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 24rpx;
+  background-color: white;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+}
+
+.picker-arrow {
+  font-size: 18px;
+  color: #666666; /* 7.1.3 对比度修复：#999→#666 */
+}
+
+/* AI识别结果 */
+.ai-result {
+  background-color: #f0f9ff;
+  border-left: 4rpx solid #4CAF50;
+  padding: 24rpx;
+  margin: 20rpx 0;
+  border-radius: 8rpx;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.result-icon {
+  font-size: 24px;
+  margin-right: 12rpx;
+}
+
+.result-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.result-content {
+  margin-bottom: 20rpx;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.result-label {
+  font-size: 18px;
+  color: #666;
+}
+
+.result-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.validation-status {
+  display: flex;
+  align-items: center;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  margin-top: 20rpx;
+}
+
+.validation-status.valid {
+  background-color: #e8f5e9;
+}
+
+.validation-status.invalid {
+  background-color: #ffebee;
+}
+
+.status-icon {
+  font-size: 20px;
+  margin-right: 12rpx;
+}
+
+.validation-status.valid .status-icon {
+  color: #4CAF50;
+}
+
+.validation-status.invalid .status-icon {
+  color: #F44336;
+}
+
+.status-text {
+  font-size: 18px;
+  flex: 1;
+}
+
+/* 按钮 */
+.btn {
+  display: block;
+  width: 100%;
+  height: 96rpx;
+  line-height: 88rpx;
+  border-radius: 12rpx;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-primary[disabled] {
+  background-color: #cccccc;
+  color: #666666; /* 7.1.3 对比度修复：#999→#666 */
+}
+
+/* 积分规则 */
+.points-rules {
+  margin-top: 20rpx;
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #fafafa;
+  border-radius: 8rpx;
+  margin-bottom: 12rpx;
+}
+
+.rule-icon {
+  font-size: 32px;
+  margin-right: 20rpx;
+}
+
+.rule-content {
+  flex: 1;
+}
+
+.rule-title {
+  font-size: 18px;
+  color: #333;
+  display: block;
+}
+
+.rule-points {
+  font-size: 18px;
+  color: #FF9800;
+  font-weight: bold;
+}
+
+/* 声明 */
+.declaration {
+  padding: 24rpx;
+  background-color: #fff9e6;
+  border-radius: 8rpx;
+  margin-top: 20rpx;
+  font-size: 18px;
+  color: #666;
+  line-height: 1.8;
+}

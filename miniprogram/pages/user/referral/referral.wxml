@@ -1,0 +1,58 @@
+<!--pages/user/referral/referral.wxml-->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-title">我的推荐</view>
+
+  <!-- 统计卡 -->
+  <view class="stats-card">
+    <view class="stats-item">
+      <text class="stats-value">{{stats.total}}</text>
+      <text class="stats-label">总推荐(人)</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value">{{stats.completed}}</text>
+      <text class="stats-label">已完成(人)</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value">{{stats.rewardPoints}}</text>
+      <text class="stats-label">累计获得(积分)</text>
+    </view>
+  </view>
+
+  <!-- 分享卡 -->
+  <view class="share-card">
+    <view class="share-title">我的专属分享链接</view>
+    <view class="share-content" selectable="{{true}}">{{qrContent}}</view>
+    <view class="share-tip">复制链接发给好友，或点"分享给朋友"邀请注册</view>
+    <view class="share-actions">
+      <button class="share-btn copy-btn" bindtap="copyShareLink" hover-class="share-btn-hover">复制链接</button>
+      <button class="share-btn friend-btn" open-type="share" hover-class="share-btn-hover">分享给朋友</button>
+    </view>
+  </view>
+
+  <!-- 推荐列表 -->
+  <view class="section-title">推荐记录</view>
+  <view class="referral-list">
+    <view class="referral-item" wx:for="{{referrals}}" wx:key="id">
+      <view class="referral-left">
+        <text class="referral-name">{{item.nickName}}</text>
+        <text class="referral-time">注册时间：{{item.createdAt}}</text>
+      </view>
+      <view class="referral-status {{item.questionnaireCompleted ? 'status-done' : 'status-pending'}}">
+        <text class="status-icon">{{item.questionnaireCompleted ? '✓' : '○'}}</text>
+        <text class="status-text">{{item.questionnaireCompleted ? '已完成问卷' : '未完成问卷'}}</text>
+      </view>
+    </view>
+
+    <view class="empty-tip" wx:if="{{referrals.length === 0 && !loading}}">
+      <text>暂无推荐记录，快去邀请好友吧！</text>
+      <button class="btn btn-primary empty-action-btn" open-type="share">邀请好友</button>
+    </view>
+    <view class="loading-tip" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+    <view class="no-more-tip" wx:if="{{!hasMore && referrals.length > 0}}">
+      <text>没有更多记录了</text>
+    </view>
+  </view>
+</view>

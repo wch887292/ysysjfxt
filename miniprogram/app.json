@@ -1,0 +1,100 @@
+{
+  "pages": [
+    "pages/user/home/home",
+    "pages/user/upload/upload",
+    "pages/user/points/points",
+    "pages/user/exchange/exchange",
+    "pages/user/exchange/history",
+    "pages/user/profile/profile",
+    "pages/user/questionnaire/questionnaire",
+    "pages/user/statistics/statistics",
+    "pages/user/settings/settings",
+    "pages/user/support/support",
+    "pages/user/privacy/privacy",
+    "pages/user/about/about",
+    "pages/user/course/list",
+    "pages/user/course/detail",
+    "pages/user/course/play",
+    "pages/user/report/crisis-hook",
+    "pages/user/report/7day-plan",
+    "pages/user/referral/referral",
+    "pages/user/articles/articles",
+    "pages/user/articles/detail",
+    "pages/agent/home/home",
+    "pages/agent/users/users",
+    "pages/agent/review/review",
+    "pages/agent/statistics/statistics",
+    "pages/agent/write-off/write-off",
+    "pages/agent/commissions/commissions",
+    "pages/agent/posts/posts",
+    "pages/agent/report-edit/report-edit",
+    "pages/agent/report-download/report-download",
+    "pages/agent/qrcode/qrcode",
+    "pages/agent/convert-member/convert-member",
+    "pages/service-provider/home/home",
+    "pages/service-provider/users/users",
+    "pages/service-provider/reports/reports",
+    "pages/service-provider/receptions/receptions",
+    "pages/service-provider/profile/profile",
+    "pages/service-provider/alerts/alerts",
+    "pages/admin/dashboard/dashboard",
+    "pages/admin/accounts/accounts",
+    "pages/admin/users/users",
+    "pages/admin/config/config",
+    "pages/admin/forbidden-words/forbidden-words",
+    "pages/admin/reports/reports",
+    "pages/admin/articles/articles",
+    "pages/admin/gifts/gifts",
+    "pages/admin/orders/orders",
+    "pages/admin/points/points",
+    "pages/admin/commissions/commissions",
+    "pages/admin/write-offs/write-offs",
+    "pages/admin/prompts/prompts",
+    "pages/admin/posts-review/posts-review",
+    "pages/admin/system-settings/system-settings"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTitleText": "健康饮食积分",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/user/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/user/upload/upload",
+        "text": "上传"
+      },
+      {
+        "pagePath": "pages/user/points/points",
+        "text": "积分"
+      },
+      {
+        "pagePath": "pages/user/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "requiredBackgroundModes": [],
+  "preloadRule": {
+    "pages/user/home/home": {
+      "network": "all",
+      "packages": ["__APP__"]
+    },
+    "pages/user/upload/upload": {
+      "network": "wifi",
+      "packages": ["__APP__"]
+    }
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "__usePrivacyCheck__": true
+}

@@ -1,0 +1,31 @@
+<!--pages/user/course/list.wxml-->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">健康课程</text>
+    <text class="page-subtitle">学习健康知识，赚取积分</text>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading-tip">加载中...</view>
+  </block>
+
+  <block wx:elif="{{courses.length === 0}}">
+    <view class="empty-tip">暂无课程</view>
+  </block>
+
+  <block wx:else>
+    <view class="course-card" wx:for="{{courses}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <image class="course-cover" src="{{item.coverImage}}" mode="aspectFill"></image>
+      <view class="course-info">
+        <text class="course-title">{{item.title}}</text>
+        <text class="course-duration">阅读时长：{{item.duration}}</text>
+        <view class="course-progress">
+          <view class="progress-bar">
+            <view class="progress-inner" style="--progress: {{progressMap[item.id] || 0}}%"></view>
+          </view>
+          <text class="progress-text">{{progressMap[item.id] || 0}}%</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

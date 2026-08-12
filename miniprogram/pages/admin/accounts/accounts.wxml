@@ -1,0 +1,113 @@
+<!--pages/admin/accounts/accounts.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="flex-between">
+      <text class="subtitle">账号列表</text>
+      <button class="btn-add" bindtap="onShowCreate" hover-class="btn-hover">+ 创建账号</button>
+    </view>
+
+    <view wx:if="{{accounts.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{accounts}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-name">{{item.nick_name}}</text>
+          <text class="item-tag role-{{item.role}}">{{item.role === 'admin' ? '管理员' : item.role === 'agent' ? '代理商' : '用户'}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">状态：{{item.status === 'active' ? '启用' : item.status === 'disabled' ? '禁用' : item.status}}</text>
+          <text class="info-text">创建时间：{{item.created_at || '-'}}</text>
+        </view>
+        <view class="item-actions">
+          <button class="btn-action" data-id="{{item.id}}" data-role="{{item.role}}" bindtap="onEditRole" hover-class="btn-hover">修改角色</button>
+          <button class="btn-action" data-id="{{item.id}}" data-status="{{item.status}}" bindtap="onEditStatus" hover-class="btn-hover">修改状态</button>
+          <button class="btn-action btn-danger" data-id="{{item.id}}" bindtap="onResetPassword" hover-class="btn-hover">重置密码</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无账号数据</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 创建账号弹窗 -->
+<view class="modal-mask" wx:if="{{showCreateModal}}" bindtap="onCancelCreate">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">创建账号</text>
+    <view class="form-group">
+      <text class="form-label">昵称 *</text>
+      <input class="form-input" placeholder="请输入昵称" value="{{newAccount.nick_name}}" data-field="nick_name" bindinput="onCreateInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">手机号 *</text>
+      <input class="form-input" type="number" placeholder="请输入手机号" value="{{newAccount.phone}}" data-field="phone" bindinput="onCreateInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">密码 *</text>
+      <input class="form-input" type="password" placeholder="请输入密码" value="{{newAccount.password}}" data-field="password" bindinput="onCreateInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">角色</text>
+      <picker range="{{['agent', 'service_provider', 'admin']}}" value="{{newAccount.role}}" bindchange="onCreateRoleChange">
+        <view class="form-input picker-value">{{newAccount.role === 'admin' ? '管理员' : newAccount.role === 'agent' ? '代理商' : '服务商'}}</view>
+      </picker>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onCreateAccount" hover-class="btn-hover">确认创建</button>
+      <button class="btn btn-secondary" bindtap="onCancelCreate" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 修改角色弹窗 -->
+<view class="modal-mask" wx:if="{{showRoleModal}}" bindtap="onCancelRole">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">修改角色</text>
+    <view class="form-group">
+      <text class="form-label">选择角色</text>
+      <picker range="{{['agent', 'service_provider', 'admin']}}" value="{{selectedRole}}" bindchange="onRoleChange">
+        <view class="form-input picker-value">{{selectedRole === 'admin' ? '管理员' : selectedRole === 'agent' ? '代理商' : '服务商'}}</view>
+      </picker>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmRole" hover-class="btn-hover">确认</button>
+      <button class="btn btn-secondary" bindtap="onCancelRole" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 修改状态弹窗 -->
+<view class="modal-mask" wx:if="{{showStatusModal}}" bindtap="onCancelStatus">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">修改状态</text>
+    <view class="form-group">
+      <text class="form-label">选择状态</text>
+      <picker range="{{['active', 'disabled']}}" value="{{selectedStatus}}" bindchange="onStatusChange">
+        <view class="form-input picker-value">{{selectedStatus === 'active' ? '启用' : '禁用'}}</view>
+      </picker>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmStatus" hover-class="btn-hover">确认</button>
+      <button class="btn btn-secondary" bindtap="onCancelStatus" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 重置密码弹窗 -->
+<view class="modal-mask" wx:if="{{showResetPwdModal}}" bindtap="onCancelResetPwd">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">重置密码</text>
+    <view class="form-group">
+      <text class="form-label">新密码</text>
+      <input class="form-input" type="password" placeholder="请输入新密码" value="{{resetPwdNewPwd}}" bindinput="onResetPwdInput" />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmResetPwd" hover-class="btn-hover">确认重置</button>
+      <button class="btn btn-secondary" bindtap="onCancelResetPwd" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

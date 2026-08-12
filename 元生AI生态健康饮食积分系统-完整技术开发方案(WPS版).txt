@@ -1,0 +1,1035 @@
+元生 AI 生态健康饮食积分系统 - 完整技术开发方案
+版本号： V4.0 交付日期： 2026-03-17 适用对象： 软件开发公司、技术团队 文档说明： 本文档为完整可执行技术方案，包含会员体系、危机钩子报告、AI 驯化、积分系统、适老化设计等全部功能，技术公司可直接用于开发
+
+目录
+1.项目概述 (#一项目概述)
+2.系统架构 (#二系统架构)
+3.会员体系与用户身份 (#三会员体系与用户身份)
+4.危机钩子报告功能 (#四危机钩子报告功能)
+5.AI 驯化与质量控制 (#五 ai 驯化与质量控制)
+6.积分系统 (#六积分系统)
+7.适老化设计 (#七适老化设计)
+8.表单数据结构 (#八表单数据结构)
+9.API 接口定义 (#九 api 接口定义)
+10.数据库设计 (#十数据库设计)
+11.后台管理系统 (#十一后台管理系统)
+12.技术实现要求 (#十二技术实现要求)
+13.开发里程碑 (#十三开发里程碑)
+14.验收标准 (#十四验收标准)
+
+一、项目概述
+1.1 产品定位
+元生 AI 生态健康饮食积分系统是一个集健康评估、AI 饮食建议、积分激励、线下服务于一体的一站式健康管理平台。通过 AI 技术分析用户健康状况，生成个性化饮食改善方案，结合积分激励机制和线下服务网络，实现用户健康管理和商业转化。
+核心特色：
+🎯 AI 驯化：5 层控制体系，防止编造数据、医疗越界
+🪝 危机钩子：2 份报告设计，引导到店转化
+👴 适老化：大字体、大按钮、简化操作
+🏅 荣誉体系：等级勋章、惊喜激励
+🛡️ 隐私保护：支持非实名注册
+1.2 核心功能模块
+模块	功能说明	用户类型
+用户端（小程序）	微信登录、健康评估、每日打卡（图标 + 拍照）、课程学习、积分中心、积分商城、报告查看、拉新拓客	C 端用户
+代理商端（Web 后台）	用户管理、报告审核/编辑/下载、积分核销、数据统计、分润查询、店面信息发布	代理商
+服务商端（Web 后台）	客户查询、报告下载、线下接待记录、网点管理、活跃度监控	服务商
+总管理后台（Web 后台）	账号权限、系统配置、合规管理、用户管理、内容商品、订单结算、积分全局、内容审核	总部管理员
+
+1.3 核心业务流程
+┌─────────────────────────────────────────────────────────────────┐
+│  核心业务流程图                                                  │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  游客 → 微信登录 → 健康评估 → AI 生成报告 → 危机钩子报告（用户可见）│
+│                                    → 7 天调理方案（仅后台可见）    │
+│         ↓                                                       │
+│  引导到店 → 代理商下载完整报告 → 线下讲解 → 会员转化             │
+│         ↓                                                       │
+│  会员 → 每月 1 次评估 → 每日打卡（图标/拍照）→ 课程学习 → 积分获取  │
+│         ↓                                                       │
+│  积分消费 → 线上商城（积分 + 现金）/ 线下核销（实物兑换）          │
+│         ↓                                                       │
+│  拉新 → 分享 2 名新客户 → 获得"健康使者"荣誉勋章                   │
+│                                                                 │
+│  【流失预警】                                                    │
+│  会员 3 天无活跃 → 后台自动提醒代理商/服务商 → 主动跟进           │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+1.4 核心原则
+⚠️ 重要：本系统为饮食与生活方式建议工具，不能替代任何医疗诊断、治疗及医嘱。
+         所有健康决策应咨询专业医师。
+         
+🔒 科学严谨：AI 生成内容必须基于用户真实数据，不得编造
+🎯 个性化：报告必须根据用户具体情况生成，不得千篇一律
+⚕️ 合规性：不得进行疾病诊断、治疗建议，必须有免责声明
+💰 商业闭环：线上评估→线下服务→会员转化→积分消费
+👴 适老化：大字体、大按钮、简化操作，方便老年人使用
+🛡️ 隐私保护：支持非实名注册，保护用户隐私
+
+二、系统架构
+2.1 技术架构图
+┌─────────────────────────────────────────────────────────────────┐
+│                         用户层                                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │ 微信小程序   │  │ 代理商后台   │  │ 服务商后台   │          │
+│  │ (适老化版)   │  │  (Web)       │  │  (Web)       │          │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘          │
+│         │                 │                 │                   │
+│         └─────────────────┼─────────────────┘                   │
+│                           ↓                                     │
+│                  ┌────────────────┐                             │
+│                  │     Nginx      │  负载均衡 + SSL              │
+│                  └───────┬────────┘                             │
+│                          │                                      │
+│         ┌────────────────┼────────────────┐                    │
+│         ↓                ↓                ↓                     │
+│  ┌───────────┐   ┌───────────┐   ┌───────────┐                │
+│  │ 小程序 API │   │ 后台 API  │   │  文件服务  │                │
+│  │  (Node)   │   │  (Node)   │   │   (OSS)   │                │
+│  └─────┬─────┘   └─────┬─────┘   └───────────┘                │
+│        │               │                                       │
+│        │         ┌─────┴─────┐                                │
+│        │         │  豆包 AI   │                                │
+│        │         │  接口     │                                │
+│        │         └───────────┘                                │
+│        │                                                       │
+│        ↓                                                       │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐                 │
+│  │   MySQL   │  │   Redis   │  │   日志    │                 │
+│  │  数据库   │  │   缓存    │  │   存储    │                 │
+│  └───────────┘  └───────────┘  └───────────┘                 │
+└─────────────────────────────────────────────────────────────────┘
+2.2 技术栈要求
+模块	技术要求	版本要求
+小程序前端	微信小程序原生开发	基础库 2.19+
+后台管理前端	Vue 3 + Element Plus	Vue 3.3+
+后端框架	Node.js + Express/NestJS	Node 18.x LTS
+数据库	MySQL	8.0+
+缓存	Redis	6.x
+文件存储	阿里云 OSS/腾讯云 COS	-
+AI 接口	豆包 API	doubao-pro-32k
+图片识别	阿里云内容安全/腾讯云内容安全	-
+Web 服务器	Nginx	1.20+
+
+2.3 性能要求
+指标	要求	说明
+小程序首页加载	< 2 秒	首屏渲染时间
+评估表提交	< 3 秒	提交响应时间
+AI 分析响应	< 30 秒	报告生成时间
+API 响应时间	< 500ms	P95 延迟
+并发用户支持	≥ 500	同时在线用户
+系统可用性	≥ 99%	月度可用性
+图片识别响应	< 3 秒	饮食图片验证
+
+
+三、会员体系与用户身份
+3.1 用户身份定义
+身份	定义	权限
+游客	首次通过分享码进入，未注册会员	可查看危机钩子报告，不可查看完整方案
+用户	已注册但未开通会员	可查看全部报告，无每月评估次数限制
+会员	已注册会员身份	每月 1 次免费评估 + 查看完整报告 + 积分权益
+服务商	线下门店服务人员	可下载客户报告，进行线下讲解
+代理商	拥有分享码的渠道商	可开通会员、查看客户报告、管理客户
+
+3.2 会员荣誉等级体系
+┌─────────────────────────────────────────────────────────────────┐
+│  会员荣誉等级体系                                                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  【等级勋章】                                                    │
+│                                                                 │
+│  Lv.1 健康新人 → 注册即得                                        │
+│       权益：基础积分获取                                         │
+│                                                                 │
+│  Lv.2 健康达人 → 连续打卡 7 天                                   │
+│       权益：积分获取 +10%                                       │
+│                                                                 │
+│  Lv.3 健康之星 → 连续打卡 30 天                                  │
+│       权益：积分获取 +20% + 专属客服                             │
+│                                                                 │
+│  Lv.4 健康大使 → 累计打卡 90 天                                  │
+│       权益：积分获取 +30% + 优先活动参与                         │
+│                                                                 │
+│  Lv.5 健康使者 → 分享 2 名新客户注册并完成首评估                   │
+│       权益：积分获取 +40% + 专属礼品 + 年度表彰                   │
+│                                                                 │
+│  【特殊勋章】                                                    │
+│  🏅 学习达人 → 累计学习 10 门课程                                 │
+│  🏅 拉新能手 → 累计拉新 5 人                                      │
+│  🏅 坚持之星 → 连续打卡 100 天                                    │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+3.3 会员权益
+权益	说明	限制
+健康评估	免费填写健康调查表	每月限 1 次
+完整报告	查看 7 天调理方案完整内容	每月限 1 次
+报告下载	下载 PDF 版本报告	每月限 1 次
+积分获取	打卡、签到、拉新、学习获取积分	按规则计算
+积分消费	积分商城兑换商品（积分 + 现金）	按商城规则
+线下核销	代理商处实物兑换积分	代理商操作
+历史记录	查看历史评估记录	无限制
+荣誉勋章	等级勋章、特殊勋章展示	无限制
+
+3.4 会员次数限制逻辑
+// 检查本月评估次数
+async function checkAssessmentLimit(userId) {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+  
+  const assessmentRecord = await db.assessments.findOne({
+    user_id: userId,
+    year: currentYear,
+    month: currentMonth
+  });
+  
+  if (assessmentRecord && assessmentRecord.count >= 1) {
+    return {
+      allowed: false,
+      message: '您本月的评估次数已用完，请于下月再来',
+      nextAvailableDate: new Date(currentYear, currentMonth + 1, 1)
+    };
+  }
+  
+  return { allowed: true };
+}
+3.5 流失预警机制
+// 检测 3 天无活跃用户
+async function checkInactiveUsers() {
+  const threeDaysAgo = new Date();
+  threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+  
+  // 查询 3 天无打卡、无课程学习的会员
+  const inactiveUsers = await db.users.find({
+    is_member: true,
+    last_active_date: { $lt: threeDaysAgo }
+  });
+  
+  for (const user of inactiveUsers) {
+    // 通知代理商
+    await notifyAgent(user.agent_id, {
+      type: 'user_inactive',
+      user_id: user.id,
+      user_name: user.name,
+      days_inactive: 3,
+      message: `您的用户${user.name}已 3 天未活跃，请及时跟进`
+    });
+    
+    // 通知服务商
+    if (user.service_provider_id) {
+      await notifyServiceProvider(user.service_provider_id, {
+        type: 'user_inactive',
+        user_id: user.id,
+        user_name: user.name,
+        days_inactive: 3,
+        message: `您的客户${user.name}已 3 天未活跃，请及时跟进`
+      });
+    }
+  }
+}
+
+// 每日凌晨执行
+cron.schedule('0 2 * * *', checkInactiveUsers);
+3.6 分享码体系
+分享码结构：AGT-XXXXXX（代理商 ID+ 随机码）
+
+追踪逻辑：
+1. 游客通过分享码进入小程序
+2. 系统记录分享码与游客的绑定关系
+3. 游客转化为用户/会员后，分享码绑定该用户
+4. 代理商可查看其分享码带来的用户列表
+5. 用户消费/活跃，代理商获得相应分润
+6. 用户分享 2 名新客户，获得"健康使者"勋章
+
+四、危机钩子报告功能
+4.1 报告类型定义
+报告类型	名称	内容	可见用户	用途
+报告 A	危机钩子报告	健康风险概述 + 痛点分析 + 引流话术	所有用户	引导到店
+报告 B	7 天调理方案	完整的 7 天饮食调理计划	会员/后台	交付价值
+
+4.2 危机钩子报告结构
+# 饮食健康风险评估报告
+
+**客户姓名：** {name}  
+**评估日期：** {generate_date}  
+**报告类型：** 饮食健康风险评估（简版）
+
+---
+
+## ⚠️ 重要提示
+
+本报告为饮食健康风险评估，基于您提供的信息进行 AI 分析生成。
+报告结果仅供参考，不作为疾病诊断依据。
+如需详细解读，请咨询服务商或专业医师。
+
+---
+
+## 一、您的饮食健康现状
+
+{ai_generated_current_status}
+
+## 二、潜在健康风险分析
+
+{ai_generated_risk_analysis}
+
+## 三、健康影响评估
+
+{ai_generated_health_impact}
+
+## 四、改善建议概述
+
+{ai_generated_improvement_overview}
+
+## 五、您的专属调理方案已生成
+
+{ai_generated_plan_teaser}
+
+**领取方式：**
+📍 请前往最近的服务网点，由专业服务商为您解读完整方案。
+
+**最近服务网点：**
+{name} {address} {phone}
+
+---
+
+**再次提醒：** 本报告为饮食健康风险评估，不作为疾病诊断依据。
+
+五、AI 驯化与质量控制
+5.1 AI 驯化 5 层控制体系
+┌─────────────────────────────────────────────────────────────┐
+│  AI 驯化 5 层控制体系                                         │
+├─────────────────────────────────────────────────────────────┤
+│  第 1 层【输入】→ 结构化 JSON + 数据来源标注                  │
+│  第 2 层【Prompt】→ 角色设定 + 约束规则 + 输出模板             │
+│  第 3 层【参数】→ temperature=0.3 降低随机性                  │
+│  第 4 层【验证】→ 规则校验 + 敏感词检测 + 医疗红线检查        │
+│  第 5 层【优化】→ 人工审核 + 用户反馈 + Prompt 迭代           │
+└─────────────────────────────────────────────────────────────┘
+5.2 第 1 层：输入控制
+数据结构化设计
+// 用户健康数据结构（带来源标注）
+{
+  "basic_info": {
+    "name": "张三",
+    "age_range": "46-60",
+    "region": "广东广州"
+  },
+  "health_indicators": {
+    "blood_pressure": {
+      "status": "high",
+      "value": "150/95",
+      "source": "user_provided"  // ✅ 用户提供的真实数据
+    },
+    "blood_sugar": {
+      "status": "unknown",
+      "value": null,
+      "source": "not_provided"   // ⚠️ 用户未提供，AI 不得编造
+    }
+  },
+  "diet_habits": {
+    "staple_food": ["rice", "wheat"],
+    "taste_preference": ["salty", "oily"]
+  }
+}
+5.3 第 2 层：Prompt 驯化
+System Prompt（固定）
+# 角色设定
+
+你是一位拥有 15 年临床经验的注册营养师，擅长根据用户的饮食生活习惯分析潜在健康风险。
+
+# 工作原则
+
+1. **真实性原则**：只基于用户提供的真实信息分析，不编造数据
+2. **个性化原则**：每个建议必须与用户具体情况直接关联
+3. **谨慎性原则**：使用"可能"、"风险增加"等谨慎表述
+4. **合规原则**：不做疾病诊断，不承诺治疗效果
+
+# 禁止行为
+
+❌ 编造用户未提供的体检数值
+❌ 做出疾病诊断（如"您患有糖尿病"）
+❌ 承诺治疗效果（如"7 天治愈"）
+❌ 使用恐吓性语言（如"会得癌症"）
+❌ 使用绝对化表述（如"一定会"、"肯定"）
+
+# 必须包含
+
+✅ 基于用户真实数据的分析
+✅ 谨慎的风险表述（"可能"、"风险增加"）
+✅ 免责声明
+✅ 引导到店领取完整方案的话术
+5.4 第 3 层：参数控制
+豆包 API 参数配置
+{
+  "model": "doubao-pro-32k",
+  "temperature": 0.3,
+  "top_p": 0.8,
+  "top_k": 40,
+  "max_tokens": 2000,
+  "presence_penalty": 0.2,
+  "frequency_penalty": 0.3
+}
+5.5 第 4 层：自动验证
+敏感词检测规则
+// 禁止出现的表述（医疗红线）
+const FORBIDDEN_PATTERNS = [
+  { pattern: /治疗.*疾病/, message: '禁止使用"治疗疾病"表述' },
+  { pattern: /治愈/, message: '禁止使用"治愈"表述' },
+  { pattern: /诊断.*为/, message: '禁止使用"诊断为"表述' },
+  { pattern: /处方/, message: '禁止使用"处方"表述' },
+  { pattern: /代替.*药物/, message: '禁止使用"代替药物"表述' },
+  { pattern: /疗效/, message: '禁止使用"疗效"表述' },
+  { pattern: /根治/, message: '禁止使用"根治"表述' },
+  { pattern: /停药/, message: '禁止使用"停药"表述' },
+  { pattern: /保证.*天好转/, message: '禁止承诺效果' },
+  { pattern: /肯定.*改善/, message: '禁止绝对化表述' }
+];
+
+// 验证函数
+function checkSensitiveWords(output) {
+  const errors = [];
+  
+  FORBIDDEN_PATTERNS.forEach(({ pattern, message }) => {
+    if (pattern.test(output)) {
+      errors.push(`[医疗红线] ${message}`);
+    }
+  });
+  
+  return errors;
+}
+
+六、积分系统
+6.1 积分获取规则
+行为	积分值	说明	后台可配
+每日三餐打卡	+10 分/餐	每日最多 3 次	✅
+遵循饮食计划	+20 分/次	打卡后确认	✅
+每日签到	+5 分/天	连续签到额外奖励	✅
+课程学习	+10 分/课程	学习进度≥80% 才给积分	✅
+拉新注册	+50 分/人	新用户完成首评估	✅
+拉新活跃	+100 分/人	新用户 7 天活跃	✅
+分享 2 名新客户	+200 分	获得"健康使者"勋章	✅
+
+6.2 积分惊喜激励
+// 获得积分后随机显示惊喜提示词
+const surpriseMessages = [
+  '🎉 太棒了！离健康目标又近了一步！',
+  '💪 坚持就是胜利，继续加油！',
+  '🌟 您今天的努力，明天的健康！',
+  '🏆 超越昨天的自己，真棒！',
+  '🎁 积分翻倍卡已放入您的账户！',
+  '⭐ 连续打卡 7 天可获得额外奖励哦！'
+];
+
+function getSurpriseMessage(points) {
+  const baseMessage = `恭喜您获得${points}积分！`;
+  const surprise = surpriseMessages[Math.floor(Math.random() * surpriseMessages.length)];
+  return `${baseMessage}\n${surprise}`;
+}
+6.3 积分消费规则
+兑换模式	说明	示例	限制
+线上商城	积分 + 现金兑换	500 积分 +50 元兑换商品	不能全积分兑换
+线下核销	代理商实物兑换	1000 积分兑换店面礼品	需平台记录留存
+
+6.4 线下积分核销流程
+1. 会员到店，出示积分二维码
+   ↓
+2. 代理商登录后台，扫码核销
+   ↓
+3. 输入核销信息：
+   - 核销积分：1000 分
+   - 兑换礼品：[线下自定，如"健康手环"]
+   - 备注：店面自行公示，不在平台展示
+   ↓
+4. 系统扣减会员积分
+   ↓
+5. 平台记录留存（积分流水 + 礼品备注）
+   ↓
+6. 会员积分余额实时更新
+6.5 课程学习积分规则
+// 课程学习进度追踪
+async function trackCourseProgress(userId, courseId, progress) {
+  // 学习进度≥80% 才给积分
+  if (progress >= 80) {
+    const record = await db.courseRecords.findOne({
+      user_id: userId,
+      course_id: courseId,
+      date: today
+    });
+    
+    if (!record || !record.points_earned) {
+      // 给用户加积分
+      await addPoints(userId, 10, 'course_learning', `学习课程${courseId}`);
+      
+      // 更新记录
+      await db.courseRecords.updateOne(
+        { user_id: userId, course_id: courseId, date: today },
+        { $set: { points_earned: 10, progress: progress } }
+      );
+    }
+  }
+}
+
+七、适老化设计
+7.1 设计原则
+┌─────────────────────────────────────────────────────────────┐
+│  适老化设计原则                                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  1. 大字体：最小 18px，标题 24px+                           │
+│  2. 大按钮：最小点击区域 44x44pt                            │
+│  3. 高对比：文字与背景对比度≥4.5:1                          │
+│  4. 简化操作：减少步骤，一键完成                            │
+│  5. 语音辅助：支持语音播报                                  │
+│  6. 明确反馈：操作成功/失败明确提示                         │
+│  7. 防误触：重要操作二次确认                                │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+7.2 图标打卡设计
+┌─────────────────────────────────────────────────────────────────┐
+│  每日三餐打卡 - 图标模式                                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  今天吃了什么？（点击吃过的图标）                                │
+│                                                                 │
+│  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐                     │
+│  │ 🍚  │ │ 🥬  │ │ 🥩  │ │ 🥛  │ │ 🥚  │                     │
+│  │主食 │ │蔬菜 │ │肉类 │ │奶  │ │蛋  │                     │
+│  └─────┘ └─────┘ └─────┘ └─────┘ └─────┘                     │
+│                                                                 │
+│  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐                     │
+│  │ 🍎  │ │ 🍜  │ │ 🥣  │ │ 🍲  │ │ 📷  │                     │
+│  │水果 │ │面食 │ │粥  │ │其他 │ │拍照 │                     │
+│  └─────┘ └─────┘ └─────┘ └─────┘ └─────┘                     │
+│                                                                 │
+│  已选择：🍚主食 🥬蔬菜 🥩肉类                                   │
+│                                                                 │
+│         ┌────────────────────────────┐                         │
+│         │   ✅ 我吃好了               │                         │
+│         └────────────────────────────┘                         │
+│                                                                 │
+│  【操作说明】                                                    │
+│  1. 点击吃过的图标（高亮选中）                                  │
+│  2. 可多选，最多 9 项                                            │
+│  3. 点击底部"我吃好了"按钮完成打卡                              │
+│  4. 拍照为可选项，点击相机图标上传图片                          │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+7.3 饮食图片验证
+// 调用阿里云内容安全 API 验证图片
+async function validateFoodImage(imageUrl) {
+  const result = await aliyunContentModeration.imageDetection({
+    imageUrl: imageUrl,
+    scenes: ['porn', 'terrorism', 'ad', 'live', 'logo', 'qrcode']
+  });
+  
+  // 检测是否包含违规内容
+  if (result.label === 'porn' || result.label === 'terrorism') {
+    return {
+      valid: false,
+      message: '图片包含违规内容，请上传饮食相关图片'
+    };
+  }
+  
+  // 检测是否包含食物（使用 AI 图像识别）
+  const foodDetection = await aliyunImageRecognition.detect({
+    imageUrl: imageUrl,
+    categories: ['food', 'dish', 'fruit', 'vegetable']
+  });
+  
+  if (foodDetection.confidence < 0.6) {
+    return {
+      valid: false,
+      message: '请上传饮食相关图片'
+    };
+  }
+  
+  return { valid: true };
+}
+7.4 隐私保护设计
+【非实名注册】
+- 支持昵称注册，不强制真实姓名
+- 手机号可选填（用于找回账号）
+- 健康数据加密存储
+- 后台展示脱敏处理
+
+【隐私设置】
+- 用户可设置信息可见范围
+- 代理商仅可见名下客户
+- 服务商仅可见接待客户
+- 数据导出/删除支持
+
+八、表单数据结构
+8.1 完整数据字段定义
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "user_identity": {
+      "type": "object",
+      "properties": {
+        "user_id": {"type": "string"},
+        "identity_type": {"type": "string", "enum": ["guest", "user", "member", "service_provider", "agent"]},
+        "share_code": {"type": "string"},
+        "agent_id": {"type": "string"},
+        "wechat_openid": {"type": "string"},
+        "nickname": {"type": "string"},
+        "real_name": {"type": "string"},
+        "is_real_name": {"type": "boolean", "default": false},
+        "register_date": {"type": "string", "format": "date-time"},
+        "last_assessment_date": {"type": "string", "format": "date"},
+        "assessment_count_this_month": {"type": "integer", "minimum": 0, "maximum": 1},
+        "last_active_date": {"type": "string", "format": "date"},
+        "honor_level": {"type": "string", "enum": ["newcomer", "expert", "star", "ambassador", "messenger"]},
+        "badges": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "points": {
+      "type": "object",
+      "properties": {
+        "total_points": {"type": "integer", "default": 0},
+        "available_points": {"type": "integer", "default": 0},
+        "frozen_points": {"type": "integer", "default": 0}
+      }
+    },
+    "health_assessment": {
+      "type": "object",
+      "properties": {
+        "diet_habits": {"type": "object"},
+        "supplements": {"type": "object"},
+        "health_baseline": {"type": "object"},
+        "medical_history": {"type": "object"},
+        "lifestyle": {"type": "object"}
+      }
+    },
+    "reports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "report_id": {"type": "string"},
+          "report_type": {"type": "string", "enum": ["crisis_hook", "7day_plan"]},
+          "generate_date": {"type": "string", "format": "date-time"},
+          "content": {"type": "string"},
+          "visible_to_guest": {"type": "boolean"}
+        }
+      }
+    }
+  }
+}
+
+九、API 接口定义
+9.1 用户身份识别接口
+POST /api/v1/user/identify
+
+Request:
+{
+  "wechat_openid": "string",
+  "share_code": "string (optional)"
+}
+
+Response:
+{
+  "code": 200,
+  "data": {
+    "user_id": "uuid",
+    "identity_type": "guest|user|member|agent",
+    "is_first_visit": true,
+    "agent_id": "uuid (if shared)",
+    "assessment_limit": {
+      "used_this_month": 0,
+      "limit": 1,
+      "reset_date": "2026-04-01"
+    },
+    "honor_level": "newcomer",
+    "badges": []
+  }
+}
+9.2 打卡接口
+// 图标打卡
+POST /api/v1/clock-in/icon
+
+Request:
+{
+  "meal_type": "breakfast|lunch|dinner",
+  "food_icons": ["rice", "vegetable", "meat"],
+  "image_url": "string (optional)"
+}
+
+Response:
+{
+  "code": 200,
+  "data": {
+    "points_earned": 10,
+    "total_points": 120,
+    "surprise_message": "🎉 太棒了！离健康目标又近了一步！"
+  }
+}
+
+// 图片打卡
+POST /api/v1/clock-in/image
+
+Request:
+{
+  "meal_type": "breakfast|lunch|dinner",
+  "image_url": "string"
+}
+
+Response:
+{
+  "code": 200,
+  "data": {
+    "image_valid": true,
+    "points_earned": 10,
+    "total_points": 120
+  }
+}
+9.3 课程学习接口
+// 更新学习进度
+POST /api/v1/course/progress
+
+Request:
+{
+  "course_id": "uuid",
+  "progress": 85
+}
+
+Response:
+{
+  "code": 200,
+  "data": {
+    "points_earned": 10,
+    "message": "学习进度达到 80%，获得 10 积分奖励！"
+  }
+}
+9.4 积分核销接口
+// 线下核销
+POST /api/v1/points/write-off
+
+Request:
+{
+  "user_id": "uuid",
+  "points": 1000,
+  "gift_description": "健康手环",
+  "remark": "店面自行公示礼品"
+}
+
+Response:
+{
+  "code": 200,
+  "data": {
+    "new_balance": 500,
+    "write_off_id": "uuid",
+    "write_off_time": "2026-03-17T14:00:00Z"
+  }
+}
+9.5 信息发布接口
+// 代理商发布图文信息
+POST /api/v1/agent/publish
+
+Request:
+{
+  "agent_id": "uuid",
+  "company_name": "XX 健康咨询公司",
+  "title": "春季健康讲座",
+  "content": "markdown 内容",
+  "images": ["url1", "url2"]
+}
+
+Response:
+{
+  "code": 200,
+  "data": {
+    "publish_id": "uuid",
+    "status": "pending_review",
+    "message": "信息发布成功，等待总部审核"
+  }
+}
+
+十、数据库设计
+10.1 用户表（users）
+CREATE TABLE users (
+  id VARCHAR(36) PRIMARY KEY,
+  wechat_openid VARCHAR(64) UNIQUE NOT NULL,
+  identity_type ENUM('guest', 'user', 'member', 'service_provider', 'agent') DEFAULT 'guest',
+  nickname VARCHAR(50),
+  real_name VARCHAR(50),
+  is_real_name BOOLEAN DEFAULT FALSE,
+  phone VARCHAR(20),
+  avatar_url VARCHAR(255),
+  agent_id VARCHAR(36),
+  service_provider_id VARCHAR(36),
+  share_code VARCHAR(20),
+  is_member BOOLEAN DEFAULT FALSE,
+  member_since DATE,
+  last_assessment_date DATE,
+  assessment_count_this_month INT DEFAULT 0,
+  last_active_date DATE,
+  honor_level ENUM('newcomer', 'expert', 'star', 'ambassador', 'messenger') DEFAULT 'newcomer',
+  badges JSON,
+  total_points INT DEFAULT 0,
+  available_points INT DEFAULT 0,
+  frozen_points INT DEFAULT 0,
+  status ENUM('active', 'banned') DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_agent_id (agent_id),
+  INDEX idx_identity_type (identity_type),
+  INDEX idx_wechat_openid (wechat_openid),
+  INDEX idx_last_active (last_active_date)
+);
+10.2 打卡记录表（clock_in_records）
+CREATE TABLE clock_in_records (
+  id VARCHAR(36) PRIMARY KEY,
+  user_id VARCHAR(36) NOT NULL,
+  meal_type ENUM('breakfast', 'lunch', 'dinner') NOT NULL,
+  clock_in_type ENUM('icon', 'image') NOT NULL,
+  food_icons JSON,
+  image_url VARCHAR(255),
+  image_verified BOOLEAN DEFAULT FALSE,
+  follow_plan BOOLEAN DEFAULT FALSE,
+  points_earned INT DEFAULT 0,
+  clock_in_date DATE NOT NULL,
+  clock_in_time DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  UNIQUE KEY unique_user_date_meal (user_id, clock_in_date, meal_type),
+  INDEX idx_user_id (user_id),
+  INDEX idx_date (clock_in_date)
+);
+10.3 课程学习记录表（course_records）
+CREATE TABLE course_records (
+  id VARCHAR(36) PRIMARY KEY,
+  user_id VARCHAR(36) NOT NULL,
+  course_id VARCHAR(36) NOT NULL,
+  progress INT DEFAULT 0,
+  points_earned INT DEFAULT 0,
+  study_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  UNIQUE KEY unique_user_course_date (user_id, course_id, study_date),
+  INDEX idx_user_id (user_id),
+  INDEX idx_course_id (course_id)
+);
+10.4 代理商发布信息表（agent_posts）
+CREATE TABLE agent_posts (
+  id VARCHAR(36) PRIMARY KEY,
+  agent_id VARCHAR(36) NOT NULL,
+  company_name VARCHAR(100),
+  title VARCHAR(200) NOT NULL,
+  content TEXT NOT NULL,
+  images JSON,
+  status ENUM('pending_review', 'approved', 'rejected') DEFAULT 'pending_review',
+  reviewed_by VARCHAR(36),
+  reviewed_at DATETIME,
+  reject_reason VARCHAR(255),
+  published_at DATETIME,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (agent_id) REFERENCES agents(id),
+  INDEX idx_agent_id (agent_id),
+  INDEX idx_status (status)
+);
+10.5 积分核销记录表（points_write_off）
+CREATE TABLE points_write_off (
+  id VARCHAR(36) PRIMARY KEY,
+  user_id VARCHAR(36) NOT NULL,
+  agent_id VARCHAR(36) NOT NULL,
+  points INT NOT NULL,
+  gift_description VARCHAR(255) NOT NULL,
+  remark VARCHAR(255),
+  write_off_date DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (agent_id) REFERENCES agents(id),
+  INDEX idx_user_id (user_id),
+  INDEX idx_agent_id (agent_id)
+);
+10.6 流失预警记录表（inactive_alerts）
+CREATE TABLE inactive_alerts (
+  id VARCHAR(36) PRIMARY KEY,
+  user_id VARCHAR(36) NOT NULL,
+  agent_id VARCHAR(36),
+  service_provider_id VARCHAR(36),
+  days_inactive INT NOT NULL,
+  alert_type ENUM('system', 'agent_notified', 'provider_notified') DEFAULT 'system',
+  notified_at DATETIME,
+  followed_up_at DATETIME,
+  follow_up_result VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  INDEX idx_user_id (user_id),
+  INDEX idx_days_inactive (days_inactive)
+);
+
+十一、后台管理系统
+11.1 代理商后台功能
+模块	功能	说明
+用户管理	名下用户查看	仅可查看、搜索、导出名下用户数据
+用户管理	活跃度监控	查看 3 天未活跃用户列表
+报告管理	健康调查表审核	审核用户线下提交的调查表
+报告管理	报告编辑	纯文本编辑 AI 饮食报告，违禁词检测
+报告管理	报告下载	下载危机钩子 +7 天方案完整报告
+积分管理	线下积分核销	为名下用户核销积分，需填备注和礼品描述
+数据查看	数据统计	查看名下用户活跃度、消费等数据
+数据查看	分润查询	查分润明细及结算状态
+拉新功能	二维码生成	生成专属拉新二维码
+信息发布	店面图文	发布店面信息，总部审核后显示，可显示企业名称
+
+11.2 服务商后台功能
+模块	功能	说明
+用户管理	客户查询	手机号/扫码查询客户
+用户管理	活跃度监控	查看 3 天未活跃客户列表
+报告管理	报告下载	下载危机钩子 +7 天方案完整报告
+接待管理	线下接待记录	记录接待时间、沟通内容、转化结果
+网点管理	网点信息维护	维护服务网点信息
+
+11.3 总管理后台功能
+模块	功能	说明
+账号权限	账号管理	增删改总部及代理商账号
+系统配置	业务规则配置	可视化配置积分、打卡时段等
+合规配置	违禁词库	维护违禁词库
+合规配置	接口配置	配置豆包 AI、短信、微信支付等接口密钥
+用户管理	全平台用户管控	查看、搜索、导出全平台用户数据
+内容管理	资讯发布	发布图文资讯、课程视频
+内容管理	代理商内容审核	审核代理商发布的图文信息
+商品管理	商城商品	上下架及编辑商城商品（仅积分 + 现金）
+订单管理	订单处理	处理全平台订单及售后退款
+分润管理	分润结算	自动计算代理商分润，人工打款
+积分管理	积分监控	查看全平台积分总览，人工调整
+积分管理	核销记录	查看线下积分核销记录
+
+
+十二、技术实现要求
+12.1 安全要求
+【数据加密】
+- 用户手机号加密存储（AES-256）
+- 传输加密（HTTPS/TLS）
+- 敏感信息脱敏（后台展示）
+
+【访问控制】
+- JWT Token 认证
+- RBAC 角色权限控制
+- API 调用频率限制
+
+【合规要求】
+- 用户隐私政策
+- 数据使用授权
+- 数据删除机制
+12.2 适老化要求
+【字体要求】
+- 最小字体：18px
+- 标题字体：24px+
+- 行间距：1.8 倍
+
+【按钮要求】
+- 最小点击区域：44x44pt
+- 按钮高度：≥48px
+- 按钮间距：≥16px
+
+【对比度要求】
+- 文字与背景对比度：≥4.5:1
+- 重要信息高亮显示
+
+【操作要求】
+- 减少操作步骤
+- 一键完成常用功能
+- 重要操作二次确认
+12.3 图片验证要求
+【饮食图片验证】
+- 调用阿里云/腾讯云内容安全 API
+- 检测违规内容（色情、暴力、广告等）
+- AI 识别是否包含食物
+- 验证响应时间 < 3 秒
+
+【验证流程】
+用户上传 → 内容安全检测 → AI 食物识别 → 通过/拒绝
+
+十三、开发里程碑
+阶段	内容	工期	交付物
+Phase 1	小程序前端开发（含适老化）	18 日	小程序前端
+Phase 2	后台管理系统	18 日	后台前端
+Phase 3	后端 API 与数据库	18 日	API 服务
+Phase 4	豆包 AI 接口对接	8 日	AI 集成
+Phase 5	积分系统与拉新机制	10 日	积分功能
+Phase 6	质量验证层开发	6 日	验证功能
+Phase 7	图片识别对接	4 日	图片验证
+Phase 8	流失预警系统	3 日	预警功能
+Phase 9	测试与优化	12 日	测试报告
+合计		97 日	完整系统
+
+
+十四、验收标准
+14.1 功能验收（P0 级别）
+功能	验收标准
+微信登录	一键登录成功，获取用户信息
+身份识别	游客/用户/会员正确识别，权限控制正确
+评估表填写	线上填写、提交正常
+AI 报告生成	危机钩子报告 +7 天方案正确生成
+权限控制	游客仅可见危机钩子报告，会员可见完整报告
+次数限制	会员每月限 1 次评估，超限提示正确
+后台下载	服务商/代理商可下载完整报告
+积分获取	打卡、签到、拉新、学习正确计算积分
+积分消费	线上商城（积分 + 现金）、线下核销正常
+适老化	大字体、大按钮、图标打卡正常
+图片验证	非饮食图片自动拦截
+流失预警	3 天无活跃自动提醒代理商/服务商
+信息发布	代理商发布图文，总部审核通过后可见
+
+14.2 AI 质量验收（P0 级别）
+测试场景	验收标准
+数据真实性	AI 不编造用户未提供的数据
+个性化程度	报告包含用户姓名、具体数据
+医疗合规	无诊断、治疗表述，免责声明完整
+敏感词检测	违禁词自动拦截
+钩子精准度	根据用户具体情况生成风险钩子
+
+14.3 性能验收
+指标	要求
+小程序首页加载	< 2 秒
+评估表提交	< 3 秒
+AI 分析响应	< 30 秒
+API 响应时间	< 500ms (P95)
+图片识别响应	< 3 秒
+并发用户支持	≥ 500
+
+14.4 适老化验收
+检查项	要求
+字体大小	最小 18px
+按钮大小	最小 44x44pt
+对比度	≥4.5:1
+图标打卡	9 个超大图标，易点击
+操作步骤	常用功能≤2 步完成
+
+
+十五、附录
+15.1 违禁词库（部分）
+const FORBIDDEN_WORDS = [
+  // 诊断类
+  '诊断', '确诊', '判定为', '患有', '病史',
+  
+  // 治疗类
+  '治疗', '治愈', '根治', '疗效', '药效', '处方', '用药',
+  
+  // 效果承诺
+  '保证', 'guaranteed', '一定', '肯定', '百分百', '必然',
+  
+  // 医疗行为
+  '停药', '换药', '减药', '代替药物', '替代治疗',
+  
+  // 恐吓性词汇
+  '危险', '致命', '会死', '恶化', '严重'
+];
+15.2 免责声明文案（固定）
+【表单首页声明】
+本问卷信息仅用于制定个性化饮食与生活方式建议，不构成任何医疗诊断、治疗或处方。
+所有健康决策请咨询专业医师。我们承诺对您的信息严格保密。
+
+【危机钩子报告声明】
+本报告为饮食健康风险评估，基于您提供的信息进行 AI 分析生成。
+报告结果仅供参考，不作为疾病诊断依据。
+如需详细解读，请咨询服务商或专业医师。
+
+【7 天调理方案声明】
+本方案为饮食与生活方式建议，不能替代任何医疗诊断、治疗及医嘱。
+方案仅用于促进健康饮食调整，不作为疾病治疗依据。
+在采纳任何建议前，尤其涉及健康问题时，请务必咨询专业医师。
+
+文档结束

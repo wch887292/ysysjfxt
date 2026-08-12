@@ -1,0 +1,37 @@
+{
+  "name": "diet-points-server",
+  "version": "1.0.0",
+  "description": "健康饮食积分系统后端服务",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "init-db": "node scripts/init-db.js",
+    "test": "node tests/sim-smoke.test.js"
+  },
+  "dependencies": {
+    "ali-oss": "^6.23.0",
+    "axios": "^1.5.0",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "cos-nodejs-sdk-v5": "^2.15.4",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.9.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.6.0",
+    "node-schedule": "^2.1.1",
+    "pm2": "^7.0.3",
+    "sequelize": "^6.32.1",
+    "sharp": "^0.35.3",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

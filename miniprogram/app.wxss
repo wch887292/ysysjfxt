@@ -1,0 +1,174 @@
+/* app.wxss - 全局样式 */
+/* 字体要求：最小字体 18px，标题 24px+，行间距 1.8倍 */
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #333333;
+  background-color: #f5f5f5;
+}
+
+/* 标题样式 */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.subtitle {
+  font-size: 20px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+/* 按钮样式 - 最小高度 48px，最小点击区域 44x44pt */
+.btn {
+  height: 48px;
+  line-height: 48px;
+  border-radius: 8rpx;
+  font-size: 18px;
+  margin: 16px 0;
+}
+
+.btn-primary {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: #4CAF50;
+  border: 1px solid #4CAF50;
+}
+
+.btn-disabled {
+  background-color: #cccccc;
+  color: #666666;
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  padding: 32rpx;
+  margin: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 表单样式 */
+.form-group {
+  margin-bottom: 32rpx;
+}
+
+.form-label {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.form-input {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 24rpx;
+  border: 1px solid #ddd;
+  border-radius: 8rpx;
+  font-size: 18px;
+}
+
+/* 按钮间距：≥16px */
+.btn-group {
+  margin-top: 32rpx;
+}
+
+.btn-group button {
+  margin-bottom: 16px;
+}
+
+/* 对比度要求：≥4.5:1 */
+.text-primary {
+  color: #4CAF50;
+}
+
+.text-secondary {
+  color: #666666;
+}
+
+.text-warning {
+  color: #FF9800;
+}
+
+.text-error {
+  color: #F44336;
+}
+
+/* 布局 */
+.container {
+  padding: 32rpx;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 积分显示 */
+.points-display {
+  font-size: 32px;
+  font-weight: bold;
+  color: #FF9800;
+}
+
+/* 声明文字 */
+.declaration {
+  font-size: 18px;
+  color: #666666; /* 7.1.3 对比度≥4.5:1：#999在白底仅2.85:1，改为#666(5.74:1) */
+  line-height: 1.8;
+  padding: 20rpx;
+  background-color: #fff9e6;
+  border-left: 4rpx solid #FFB74D;
+  margin: 16rpx 0;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 80rpx;
+  color: #666666; /* 7.1.3 对比度修复 */
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 120rpx 60rpx;
+  color: #666666; /* 7.1.3 对比度修复 */
+}
+
+.empty-icon {
+  font-size: 120px;
+  color: #666666;
+}
+
+/* 空状态操作按钮 */
+.empty-action-btn {
+  margin-top: 24rpx;
+  min-width: 280rpx;
+}

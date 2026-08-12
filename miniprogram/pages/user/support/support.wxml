@@ -1,0 +1,24 @@
+<view class="container">
+  <!-- 客服电话 -->
+  <view class="phone-card">
+    <text class="phone-title">客服热线</text>
+    <text class="phone-number">{{servicePhone}}</text>
+    <text class="phone-time">{{serviceTime}}</text>
+    <button class="call-btn" bindtap="callService">📞 一键拨打</button>
+  </view>
+
+  <!-- 常见问题 -->
+  <view class="section-title">常见问题</view>
+  <view class="faq-list">
+    <view class="faq-item" wx:for="{{faqs}}" wx:key="index"
+      data-index="{{index}}" bindtap="toggleFaq">
+      <view class="faq-question">
+        <text class="faq-q-text">{{item.q}}</text>
+        <text class="faq-arrow">{{openIndex === index ? '▲' : '▼'}}</text>
+      </view>
+      <view class="faq-answer" wx:if="{{openIndex === index}}">
+        <text>{{item.a}}</text>
+      </view>
+    </view>
+  </view>
+</view>

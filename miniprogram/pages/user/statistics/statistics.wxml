@@ -1,0 +1,43 @@
+<view class="container">
+  <!-- 积分概览 -->
+  <view class="summary-card">
+    <view class="summary-item">
+      <text class="summary-value">{{points}}</text>
+      <text class="summary-label">当前积分</text>
+    </view>
+    <view class="summary-item">
+      <text class="summary-value">{{totalPoints}}</text>
+      <text class="summary-label">累计积分</text>
+    </view>
+    <view class="summary-item">
+      <text class="summary-value">{{todayPoints}}</text>
+      <text class="summary-label">今日积分</text>
+    </view>
+    <view class="summary-item">
+      <text class="summary-value">{{ranking}}</text>
+      <text class="summary-label">积分排名</text>
+    </view>
+  </view>
+
+  <!-- 打卡记录 -->
+  <view class="section-title">打卡记录</view>
+  <view class="record-list">
+    <view class="record-item" wx:for="{{records}}" wx:key="id">
+      <view class="record-left">
+        <text class="record-meal">{{item.mealType}} · {{item.type}}</text>
+        <text class="record-date">{{item.date}}</text>
+      </view>
+      <text class="record-points">+{{item.points}}分</text>
+    </view>
+    <view class="empty-tip" wx:if="{{records.length === 0 && !loading}}">
+      <text>暂无打卡记录，快去打卡吧！</text>
+      <button class="btn btn-primary empty-action-btn" bindtap="goClockIn">去打卡</button>
+    </view>
+    <view class="loading-tip" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+    <view class="no-more-tip" wx:if="{{!hasMore && records.length > 0}}">
+      <text>没有更多记录了</text>
+    </view>
+  </view>
+</view>

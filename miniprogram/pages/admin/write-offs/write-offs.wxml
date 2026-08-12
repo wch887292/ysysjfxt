@@ -1,0 +1,44 @@
+<!--pages/admin/write-offs/write-offs.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="subtitle">核销记录</text>
+    <view class="filter-row">
+      <input class="filter-input" placeholder="代理商ID" value="{{agentId}}" bindinput="onAgentIdInput" />
+      <input class="filter-input" placeholder="用户ID" value="{{userId}}" bindinput="onUserIdInput" />
+    </view>
+    <view class="filter-row">
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="filter-input picker-value">{{startDate || '开始日期'}}</view>
+      </picker>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+        <view class="filter-input picker-value">{{endDate || '结束日期'}}</view>
+      </picker>
+      <button class="btn-search" bindtap="onSearch" hover-class="btn-hover">查询</button>
+    </view>
+  </view>
+
+  <view class="card">
+    <view wx:if="{{writeOffs.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{writeOffs}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-name">{{item.gift_description || '-'}}</text>
+          <text class="item-tag tag-points">-{{item.points}}积分</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">用户：{{item.user ? item.user.nick_name : item.user_id}}</text>
+          <text class="info-text">代理商：{{item.agent ? item.agent.name : item.agent_id}}</text>
+          <text class="info-text">核销时间：{{item.write_off_date}}</text>
+          <text wx:if="{{item.remark}}" class="info-text">备注：{{item.remark}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无核销记录</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,34 @@
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-info">
+    <text class="user-name">{{userName}} 的报告</text>
+  </view>
+
+  <!-- 报告列表 -->
+  <view class="report-list">
+    <view class="report-card" wx:for="{{reports}}" wx:key="id" hover-class="card-hover">
+      <view class="report-header">
+        <text class="report-title">{{item.title}}</text>
+        <text class="report-type type-{{item.reportType}}">{{item.typeLabel}}</text>
+      </view>
+      <view class="report-meta">
+        <text class="report-date" wx:if="{{item.generatedAt}}">生成日期：{{item.generatedAt}}</text>
+      </view>
+      <button class="btn-download"
+        data-id="{{item.id}}"
+        bindtap="downloadReport"
+        hover-class="btn-download-hover"
+        disabled="{{downloadingId === item.id}}"
+        loading="{{downloadingId === item.id}}">
+        下载
+      </button>
+    </view>
+
+    <view class="empty-tip" wx:if="{{reports.length === 0 && !loading}}">
+      <text>暂无报告记录</text>
+    </view>
+    <view class="loading-tip" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,75 @@
+<!--pages/agent/posts/posts.wxml-->
+<view class="container">
+  <!-- 发布按钮 -->
+  <view class="publish-bar">
+    <button class="btn-publish" bindtap="toggleForm" hover-class="btn-hover">
+      {{showForm ? '收起发布' : '＋ 发布信息'}}
+    </button>
+  </view>
+
+  <!-- 发布表单 -->
+  <view wx:if="{{showForm}}" class="card form-card">
+    <text class="form-title">发布新信息</text>
+
+    <text class="label">标题</text>
+    <input class="input" placeholder="请输入标题（不超过100字）"
+      value="{{formData.title}}" bindinput="onTitleInput" maxlength="100" />
+
+    <text class="label mt">内容</text>
+    <textarea class="textarea" placeholder="请输入内容（不超过5000字）"
+      value="{{formData.content}}" bindinput="onContentInput" maxlength="5000" />
+
+    <text class="label mt">公司名称（选填）</text>
+    <input class="input" placeholder="请输入公司/店铺名称"
+      value="{{formData.companyName}}" bindinput="onCompanyInput" maxlength="100" />
+
+    <button class="btn-submit" loading="{{submitting}}" disabled="{{submitting}}"
+      bindtap="submitPost" hover-class="btn-hover">
+      {{submitting ? '发布中...' : '确认发布'}}
+    </button>
+  </view>
+
+  <!-- 状态筛选 -->
+  <view class="tab-bar">
+    <view class="tab-item {{statusFilter === item.value ? 'tab-active' : ''}}"
+      wx:for="{{statusTabs}}" wx:key="value"
+      data-status="{{item.value}}" bindtap="switchTab" hover-class="tab-hover">
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 信息列表 -->
+  <view class="post-list">
+    <view class="post-card" wx:for="{{posts}}" wx:key="id" hover-class="card-hover">
+      <view class="post-header">
+        <text class="post-title">{{item.title}}</text>
+        <text class="status-badge status-{{item.status}}">{{statusMap[item.status]}}</text>
+      </view>
+
+      <text class="post-content">{{item.content}}</text>
+
+      <view class="post-meta">
+        <text class="post-company" wx:if="{{item.company_name}}">🏠 {{item.company_name}}</text>
+        <text class="post-time">🕐 {{item.created_at}}</text>
+      </view>
+
+      <view wx:if="{{item.status === 'rejected' && item.reject_reason}}" class="reject-box">
+        <text class="reject-label">驳回原因：</text>
+        <text class="reject-reason">{{item.reject_reason}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{posts.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-icon">📝</text>
+      <text>暂无{{statusMap[statusFilter]}}信息</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-state">
+      <text>加载中...</text>
+    </view>
+
+    <view wx:if="{{!hasMore && posts.length > 0 && !loading}}" class="end-tip">
+      <text>— 已全部加载 —</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="12" fill="#4CAF50"/>
+  <path d="M32 14 L48 24 L48 40 L32 50 L16 40 L16 24 Z" fill="#fff" opacity="0.95"/>
+  <path d="M32 22 L40 27 L40 37 L32 42 L24 37 L24 27 Z" fill="#4CAF50"/>
+  <text x="32" y="58" font-size="8" text-anchor="middle" fill="#fff" font-family="sans-serif">AI</text>
+</svg>

@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "快乐AI饮食健康积分系统",
+    "slug": "kll-diet-points",
+    "version": "1.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#4CAF50"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kll.health"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#4CAF50"
+      },
+      "package": "com.kll.health",
+      "versionCode": 15
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-image-picker"
+    ]
+  }
+}

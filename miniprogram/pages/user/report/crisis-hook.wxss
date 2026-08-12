@@ -1,0 +1,265 @@
+/* pages/user/report/crisis-hook.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.page-header {
+  background: white;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.page-title {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 18px;
+  color: #666666;
+}
+
+.loading-tip {
+  text-align: center;
+  font-size: 18px;
+  color: #666666;
+  padding: 60rpx 0;
+}
+
+.empty-state {
+  background: white;
+  border-radius: 12rpx;
+  padding: 60rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-text {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 40rpx;
+  text-align: center;
+}
+
+.primary-btn {
+  width: 80%;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 18px;
+  border-radius: 12rpx;
+}
+
+.primary-btn[disabled] {
+  background-color: #a5d6a7;
+  color: white;
+}
+
+.report-card {
+  background: white;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.report-title {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.report-meta {
+  border-top: 1rpx solid #f0f0f0;
+  padding-top: 20rpx;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.meta-label {
+  font-size: 18px;
+  color: #666;
+}
+
+.meta-value {
+  font-size: 18px;
+  color: #333;
+}
+
+.score-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.chip {
+  font-size: 18px;
+  padding: 6rpx 24rpx;
+  border-radius: 30rpx;
+  color: white;
+}
+
+.chip-low {
+  background-color: #4CAF50;
+}
+
+.chip-medium {
+  background-color: #FF9800;
+}
+
+.chip-high {
+  background-color: #F44336;
+}
+
+.chip-unknown {
+  background-color: #9e9e9e;
+}
+
+.content-card {
+  background: white;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+/* 规格7.1.5：语音播报按钮（适老化） */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-header .section-title {
+  margin-bottom: 0;
+}
+
+.voice-btn {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  background-color: #e8f5e9;
+  border: 2rpx solid #4CAF50;
+  border-radius: 12rpx;
+  min-height: 48px;
+}
+
+.voice-btn.speaking {
+  background-color: #fff3e0;
+  border-color: #FF9800;
+}
+
+.voice-icon {
+  font-size: 24px;
+  margin-right: 8rpx;
+}
+
+.voice-text {
+  font-size: 18px;
+  color: #333;
+}
+
+.btn-hover {
+  opacity: 0.7;
+  transform: scale(0.96);
+}
+
+.section-item {
+  margin-bottom: 24rpx;
+}
+
+.section-item-title {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.section-item-text {
+  display: block;
+  font-size: 18px;
+  color: #555;
+  line-height: 1.8;
+}
+
+.empty-text {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+}
+
+.disclaimer-card {
+  background: #fff8e1;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  border-left: 8rpx solid #FF9800;
+}
+
+.disclaimer-title {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  color: #E65100;
+  margin-bottom: 8rpx;
+}
+
+.disclaimer-text {
+  display: block;
+  font-size: 18px;
+  color: #7c5b10;
+  line-height: 1.8;
+}
+
+/* 下载按钮 */
+.download-btn {
+  display: block;
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 18px;
+  border-radius: 12rpx;
+  margin-top: 24rpx;
+  border: none;
+}
+
+.download-btn[disabled] {
+  background-color: #cccccc;
+  color: #666;
+}
+
+.download-tip {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 12rpx;
+}

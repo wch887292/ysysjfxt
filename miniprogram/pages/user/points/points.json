@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "icp-footer": "/components/icp-footer/icp-footer"
+  }
+}

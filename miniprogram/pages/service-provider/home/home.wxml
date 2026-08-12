@@ -1,0 +1,73 @@
+<!--pages/service-provider/home/home.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="title">服务商控制台</text>
+  </view>
+
+  <!-- 统计数据 -->
+  <view class="card">
+    <view class="stats-grid">
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.totalUsers}}</text>
+        <text class="stat-label">总客户数</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.activeUsers}}</text>
+        <text class="stat-label">活跃客户</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.inactiveUsers}}</text>
+        <text class="stat-label">未活跃客户</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-value">{{statistics.thresholdDays}}</text>
+        <text class="stat-label">活跃阈值(天)</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="card">
+    <text class="subtitle">快捷操作</text>
+    <view class="quick-actions">
+      <view class="action-item" bindtap="navigateToUsers" hover-class="action-hover">
+        <text class="action-icon">👥</text>
+        <text class="action-text">客户查询</text>
+      </view>
+      <view class="action-item" bindtap="navigateToReports" hover-class="action-hover">
+        <text class="action-icon">📋</text>
+        <text class="action-text">报告下载</text>
+      </view>
+      <view class="action-item" bindtap="navigateToReceptions" hover-class="action-hover">
+        <text class="action-icon">📝</text>
+        <text class="action-text">接待记录</text>
+      </view>
+      <view class="action-item" bindtap="navigateToProfile" hover-class="action-hover">
+        <text class="action-icon">🏪</text>
+        <text class="action-text">网点管理</text>
+      </view>
+      <view class="action-item" bindtap="navigateToAlerts" hover-class="action-hover">
+        <text class="action-icon">🔔</text>
+        <text class="action-text">流失预警</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近未活跃客户 -->
+  <view class="card">
+    <text class="subtitle">最近未活跃客户</text>
+    <view wx:if="{{recentInactive.length > 0}}" class="inactive-list">
+      <view class="inactive-item" wx:for="{{recentInactive}}" wx:key="id">
+        <text class="inactive-name">{{item.nickName}}</text>
+        <text class="inactive-days">{{item.days_inactive}}天未活跃</text>
+      </view>
+      <view class="view-all" bindtap="navigateToUsers" hover-class="action-hover">
+        <text>查看全部</text>
+      </view>
+    </view>
+    <view wx:else class="empty-state">
+      <text class="empty-icon">📋</text>
+      <text>暂无未活跃客户</text>
+    </view>
+  </view>
+</view>

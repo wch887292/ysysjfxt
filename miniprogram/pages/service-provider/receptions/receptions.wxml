@@ -1,0 +1,74 @@
+<!--pages/service-provider/receptions/receptions.wxml-->
+<view class="container">
+  <!-- 新建按钮 -->
+  <view class="action-bar">
+    <button class="btn-new" bindtap="toggleForm" hover-class="btn-hover">
+      {{showForm ? '收起表单' : '＋ 新建接待记录'}}
+    </button>
+  </view>
+
+  <!-- 新建表单 -->
+  <view wx:if="{{showForm}}" class="card form-card">
+    <text class="form-title">新建接待记录</text>
+
+    <text class="label">客户ID</text>
+    <input class="input" placeholder="请输入客户ID" value="{{formData.userId}}"
+      bindinput="onUserIdInput" maxlength="50" />
+
+    <text class="label mt">接待时间</text>
+    <picker mode="date" value="{{formData.receptionTime}}" bindchange="onTimeChange">
+      <view class="picker-box">
+        <text wx:if="{{formData.receptionTime}}" class="picker-text">{{formData.receptionTime}}</text>
+        <text wx:else class="picker-placeholder">请选择接待日期</text>
+      </view>
+    </picker>
+
+    <text class="label mt">接待内容</text>
+    <textarea class="textarea" placeholder="请输入接待内容（选填）"
+      value="{{formData.content}}" bindinput="onContentInput" maxlength="1000" />
+
+    <text class="label mt">接待结果</text>
+    <picker mode="selector" range="{{resultOptions}}" range-key="label" bindchange="onResultChange">
+      <view class="picker-box">
+        <text class="picker-text">{{resultOptions[resultIndex].label}}</text>
+      </view>
+    </picker>
+
+    <button class="btn-submit" loading="{{submitting}}" disabled="{{submitting}}"
+      bindtap="submitReception" hover-class="btn-hover">
+      {{submitting ? '提交中...' : '确认提交'}}
+    </button>
+  </view>
+
+  <!-- 接待记录列表 -->
+  <view class="reception-list">
+    <view class="reception-card" wx:for="{{receptions}}" wx:key="id" hover-class="card-hover">
+      <view class="reception-header">
+        <text class="user-name">{{item.userName}}</text>
+        <text class="result-badge result-{{item.result}}">{{item.resultText}}</text>
+      </view>
+
+      <view class="reception-meta">
+        <text class="meta-item">🕐 {{item.receptionTime}}</text>
+        <text wx:if="{{item.userPhone}}" class="meta-item">📱 {{item.userPhone}}</text>
+      </view>
+
+      <view wx:if="{{item.content}}" class="reception-content">
+        <text>{{item.content}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{receptions.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-icon">📝</text>
+      <text>暂无接待记录</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-state">
+      <text>加载中...</text>
+    </view>
+
+    <view wx:if="{{!hasMore && receptions.length > 0 && !loading}}" class="end-tip">
+      <text>— 已全部加载 —</text>
+    </view>
+  </view>
+</view>

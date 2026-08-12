@@ -1,0 +1,53 @@
+<!--pages/admin/config/config.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="subtitle">系统配置</text>
+
+    <view wx:if="{{configs.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{configs}}" wx:key="key">
+        <view class="item-header">
+          <text class="item-key">{{item.key}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">当前值：{{item.value}}</text>
+          <text class="info-text">说明：{{item.description || '-'}}</text>
+        </view>
+        <view class="item-actions">
+          <button class="btn-action" data-item="{{item}}" bindtap="onEditConfig" hover-class="btn-hover">修改</button>
+          <button class="btn-action btn-danger" data-key="{{item.key}}" bindtap="onResetConfig" hover-class="btn-hover">重置默认</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无配置项</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 编辑配置弹窗 -->
+<view class="modal-mask" wx:if="{{showEditModal}}" bindtap="onCancelEdit">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">修改配置</text>
+    <view class="form-group">
+      <text class="form-label">配置键</text>
+      <view class="form-input readonly-value">{{editTarget}}</view>
+    </view>
+    <view class="form-group">
+      <text class="form-label">配置值</text>
+      <textarea class="form-textarea" value="{{editValue}}" bindinput="onValueInput" auto-height />
+    </view>
+    <view class="form-group">
+      <text class="form-label">说明</text>
+      <view class="form-input readonly-value">{{editDescription}}</view>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onSaveConfig" hover-class="btn-hover">保存</button>
+      <button class="btn btn-secondary" bindtap="onCancelEdit" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

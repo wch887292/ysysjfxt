@@ -1,0 +1,126 @@
+/* pages/agent/qrcode/qrcode.wxss - 适老化设计 */
+.container {
+  padding: 32rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 48rpx;
+  width: 100%;
+}
+
+.title {
+  display: block;
+  font-size: 52rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.desc {
+  display: block;
+  font-size: 36rpx;
+  color: #666666;
+  line-height: 1.6;
+}
+
+/* 二维码展示 */
+.qr-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 48rpx;
+}
+
+.qr-wrapper {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 48rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qr-image {
+  width: 480rpx;
+  height: 480rpx;
+  border-radius: 12rpx;
+}
+
+.qr-empty,
+.qr-loading {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 120rpx 80rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: #999999;
+}
+
+/* 分享码显示 */
+.share-code-section {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 32rpx 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 48rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.share-code-label {
+  font-size: 36rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
+}
+
+.share-code-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #4CAF50;
+  letter-spacing: 8rpx;
+}
+
+/* 操作按钮 */
+.actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.btn-save,
+.btn-share {
+  width: 100%;
+  height: 112rpx;
+  line-height: 112rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+  border-radius: 16rpx;
+  margin: 0;
+  border: none;
+}
+
+.btn-save {
+  background: #4CAF50;
+  color: #ffffff;
+}
+
+.btn-share {
+  background: #ffffff;
+  color: #4CAF50;
+  border: 3rpx solid #4CAF50;
+}
+
+/* hover-class 点击反馈 */
+.btn-hover {
+  opacity: 0.75;
+  transform: scale(0.97);
+}

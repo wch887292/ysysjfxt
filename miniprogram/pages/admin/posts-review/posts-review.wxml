@@ -1,0 +1,67 @@
+<!--pages/admin/posts-review/posts-review.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="subtitle">代理商内容审核</text>
+
+    <!-- 状态筛选 -->
+    <view class="filter-bar">
+      <view class="filter-item {{statusFilter === 'all' ? 'filter-active' : ''}}" data-status="all" bindtap="onFilterTap" hover-class="btn-hover">全部</view>
+      <view class="filter-item {{statusFilter === 'pending' ? 'filter-active' : ''}}" data-status="pending" bindtap="onFilterTap" hover-class="btn-hover">待审核</view>
+      <view class="filter-item {{statusFilter === 'approved' ? 'filter-active' : ''}}" data-status="approved" bindtap="onFilterTap" hover-class="btn-hover">已通过</view>
+      <view class="filter-item {{statusFilter === 'rejected' ? 'filter-active' : ''}}" data-status="rejected" bindtap="onFilterTap" hover-class="btn-hover">已拒绝</view>
+    </view>
+
+    <!-- 内容列表 -->
+    <view wx:if="{{posts.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{posts}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-title">{{item.title}}</text>
+          <text class="item-tag status-{{item.status}}">{{item.status === 'pending' ? '待审核' : item.status === 'approved' ? '已通过' : '已拒绝'}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">代理商：{{item.agent_name || '-'}}</text>
+          <text class="info-text">发布时间：{{item.created_at || '-'}}</text>
+        </view>
+        <view wx:if="{{item.summary}}" class="item-summary">
+          <text class="summary-text">{{item.summary}}</text>
+        </view>
+        <view wx:if="{{item.images && item.images.length > 0}}" class="item-images">
+          <image class="item-image" wx:for="{{item.images}}" wx:for-item="img" wx:key="*this" src="{{img}}" mode="aspectFill" bindtap="onPreviewImage" data-url="{{img}}"></image>
+        </view>
+        <view wx:if="{{item.status === 'rejected' && item.reject_reason}}" class="item-reject-reason">
+          <text class="reject-label">拒绝原因：</text>
+          <text class="reject-text">{{item.reject_reason}}</text>
+        </view>
+        <view wx:if="{{item.status === 'pending'}}" class="item-actions">
+          <button class="btn-action btn-approve" data-id="{{item.id}}" bindtap="onApprove" hover-class="btn-hover">通过</button>
+          <button class="btn-action btn-reject" data-id="{{item.id}}" bindtap="onShowReject" hover-class="btn-hover">拒绝</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无内容</text>
+    </view>
+
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 拒绝原因弹窗 -->
+<view class="modal-mask" wx:if="{{showRejectModal}}" bindtap="onCancelReject">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">拒绝原因</text>
+    <view class="form-group">
+      <text class="form-label">请填写拒绝原因</text>
+      <textarea class="form-textarea" placeholder="请输入拒绝原因" value="{{rejectReason}}" bindinput="onRejectReasonInput" maxlength="200" />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmReject" hover-class="btn-hover">确认拒绝</button>
+      <button class="btn btn-secondary" bindtap="onCancelReject" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

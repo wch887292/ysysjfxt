@@ -1,0 +1,64 @@
+<!--pages/admin/reports/reports.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="subtitle">标记报告</text>
+
+    <view wx:if="{{reports.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{reports}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-name">用户 {{item.user_id}}</text>
+          <text class="item-tag status-{{item.review_status}}">{{item.review_status === 'pending' ? '待审核' : item.review_status === 'approved' ? '已通过' : item.review_status === 'rejected' ? '已拒绝' : item.review_status}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">标记：{{item.flagged ? '是' : '否'}}</text>
+          <text class="info-text">创建时间：{{item.created_at || '-'}}</text>
+        </view>
+        <view class="item-actions">
+          <button class="btn-action" data-id="{{item.id}}" bindtap="onViewDetail" hover-class="btn-hover">详情</button>
+          <button class="btn-action" data-id="{{item.id}}" data-action="approve" bindtap="onReview" hover-class="btn-hover">通过</button>
+          <button class="btn-action btn-warning" data-id="{{item.id}}" data-action="reject" bindtap="onReview" hover-class="btn-hover">拒绝</button>
+          <button class="btn-action btn-orange" data-id="{{item.id}}" bindtap="onRewrite" hover-class="btn-hover">重写</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无标记报告</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 详情弹窗 -->
+<view class="modal-mask" wx:if="{{showDetailModal}}" bindtap="onCloseDetail">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">报告详情</text>
+    <view wx:if="{{currentReport}}" class="detail-info">
+      <text class="info-text">用户ID：{{currentReport.user_id || '-'}}</text>
+      <text class="info-text">审核状态：{{currentReport.review_status || '-'}}</text>
+      <text class="info-text">标记：{{currentReport.flagged ? '是' : '否'}}</text>
+      <text class="info-text">创建时间：{{currentReport.created_at || '-'}}</text>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-secondary" bindtap="onCloseDetail" hover-class="btn-hover">关闭</button>
+    </view>
+  </view>
+</view>
+
+<!-- 审核弹窗 -->
+<view class="modal-mask" wx:if="{{showReviewModal}}" bindtap="onCancelReview">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">{{reviewAction === 'approve' ? '通过审核' : '拒绝审核'}}</text>
+    <view class="form-group">
+      <text class="form-label">审核备注</text>
+      <textarea class="form-textarea" placeholder="请输入审核备注" value="{{reviewNote}}" bindinput="onReviewNoteInput" auto-height />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmReview" hover-class="btn-hover">确认</button>
+      <button class="btn btn-secondary" bindtap="onCancelReview" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

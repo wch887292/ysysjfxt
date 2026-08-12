@@ -1,0 +1,148 @@
+/* pages/user/exchange/history.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 顶部标题 */
+.page-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  padding: 20rpx 10rpx;
+}
+
+/* 兑换记录列表 */
+.history-list {
+  margin-top: 10rpx;
+}
+
+.exchange-card {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 卡片顶部：图片 + 信息 */
+.card-top {
+  display: flex;
+  align-items: flex-start;
+}
+
+.gift-img {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 12rpx;
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+  margin-right: 24rpx;
+  display: block;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.gift-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12rpx;
+  word-break: break-all;
+}
+
+.gift-points {
+  font-size: 18px;
+  color: #FF9800;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+/* 状态 chip */
+.status-chip {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 18px;
+  padding: 6rpx 20rpx;
+  border-radius: 24rpx;
+  border: 2rpx solid;
+  background-color: #fafafa;
+}
+
+/* 核销码 */
+.code-row {
+  display: flex;
+  align-items: center;
+  margin-top: 24rpx;
+  padding: 20rpx 24rpx;
+  background-color: #fff8e1;
+  border-left: 6rpx solid #FF9800;
+  border-radius: 8rpx;
+}
+
+.code-label {
+  font-size: 18px;
+  color: #666;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.code-value {
+  flex: 1;
+  font-size: 22px;
+  font-weight: bold;
+  color: #FF9800;
+  letter-spacing: 4rpx;
+  word-break: break-all;
+}
+
+.code-copy {
+  flex-shrink: 0;
+  min-height: 96rpx;
+  line-height: 96rpx;
+  padding: 0 24rpx;
+  font-size: 18px;
+  color: #fff;
+  background-color: #FF9800;
+  border-radius: 32rpx;
+  margin-left: 16rpx;
+}
+
+/* 元信息行 */
+.meta-row {
+  display: flex;
+  align-items: center;
+  margin-top: 16rpx;
+  font-size: 18px;
+}
+
+.meta-label {
+  color: #666;
+  flex-shrink: 0;
+}
+
+.meta-value {
+  color: #666;
+  flex: 1;
+  word-break: break-all;
+}
+
+/* 状态提示 */
+.state-tip {
+  text-align: center;
+  padding: 80rpx 20rpx;
+  color: #666;
+  font-size: 18px;
+}
+
+.state-icon {
+  font-size: 60rpx;
+  margin-bottom: 20rpx;
+}

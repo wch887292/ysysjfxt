@@ -1,0 +1,103 @@
+# ========================================
+# 健康饮食积分系统 - Docker Compose 配置
+# 服务: Node.js Backend + Nginx (使用外部 MySQL)
+# 域名: rry.klai.top
+# ========================================
+
+services:
+  # ============================
+  # 1. Node.js 后端服务
+  # ============================
+  backend:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: ysjfxt-backend
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    environment:
+      DB_HOST: host.docker.internal
+      DB_PORT: 3307
+      DB_NAME: health_system
+      DB_USER: root
+      DB_PASSWORD: wch@123456
+      PORT: 3001
+      NODE_ENV: production
+      TZ: Asia/Shanghai
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - ysjfxt-net
+    volumes:
+      # 上传文件持久化（用户打卡图片等）
+      - uploads:/app/uploads
+      # PM2 日志
+      - pm2_logs:/app/.pm2
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/api/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  # ============================
+  # 2. Nginx 反向代理
+  # ============================
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: ysjfxt-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Nginx 配置
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # SSL 证书
+      - ./ssl/:/etc/nginx/ssl/:ro
+      # 管理后台前端静态文件
+      - admin_dist:/www/wwwroot/admin-dist:ro
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - ysjfxt-net
+    command: nginx -g 'daemon off;'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+
+# ============================
+# 网络配置
+# ============================
+networks:
+  ysjfxt-net:
+    driver: bridge
+
+# ============================
+# 数据卷配置
+# ============================
+volumes:
+  uploads:
+    name: ysjfxt-uploads
+    driver: local
+  pm2_logs:
+    name: ysjfxt-pm2-logs
+    driver: local
+  admin_dist:
+    name: ysjfxt-admin-dist
+    driver: local

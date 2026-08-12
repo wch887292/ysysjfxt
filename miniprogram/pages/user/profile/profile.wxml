@@ -1,0 +1,122 @@
+<!--pages/user/profile/profile.wxml-->
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="card user-card">
+    <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <view class="user-info">
+      <text class="username">{{userInfo.nickName}}</text>
+      <!-- 规范3.1 会员身份标识 -->
+      <view class="identity-row">
+        <text class="identity-tag {{isMember ? 'identity-member' : 'identity-user'}}">{{identityName}}</text>
+        <text wx:if="{{memberSinceText}}" class="member-since">{{memberSinceText}}</text>
+      </view>
+      <!-- 规范3.2 荣誉等级展示（替代原"健康达人 Lv.X"用积分硬算的错误逻辑） -->
+      <text class="user-level">{{honorLevelName}} Lv.{{honorLevelLv}}</text>
+    </view>
+  </view>
+
+  <!-- 规范3.2 勋章展示（方案3.3：荣誉勋章展示无限制） -->
+  <view wx:if="{{badges.length > 0}}" class="card badges-card">
+    <text class="badges-title">已获勋章</text>
+    <view class="badges-list">
+      <text wx:for="{{badges}}" wx:key="*this" class="badge-chip">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 积分卡片 -->
+  <view class="card points-summary">
+    <view class="points-item">
+      <text class="points-label">当前积分</text>
+      <text class="points-value">{{points}}</text>
+    </view>
+  </view>
+
+  <!-- 规范3.6 分享码归属展示 -->
+  <view wx:if="{{boundShareCode}}" class="card share-code-card">
+    <text class="share-code-label">所属代理商分享码：</text>
+    <text class="share-code-value">{{boundShareCode}}</text>
+  </view>
+
+  <!-- 管理后台入口：已登录管理角色时显示 -->
+  <view wx:if="{{isAdmin || isAgent || isServiceProvider}}" class="card admin-entry-card">
+    <text class="subtitle">管理后台</text>
+    <view class="admin-entry-list">
+      <view wx:if="{{isAdmin}}" class="admin-entry-item" bindtap="navigateToAdmin" hover-class="menu-item-hover">
+        <text class="menu-icon">🔧</text>
+        <text class="menu-title">总管理后台</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view wx:if="{{isAgent}}" class="admin-entry-item" bindtap="navigateToAgentHome" hover-class="menu-item-hover">
+        <text class="menu-icon">🏢</text>
+        <text class="menu-title">代理商管理</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view wx:if="{{isServiceProvider}}" class="admin-entry-item" bindtap="navigateToServiceProviderHome" hover-class="menu-item-hover">
+        <text class="menu-icon">🏥</text>
+        <text class="menu-title">服务商管理</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 管理员登录入口：普通用户时显示，点击弹出登录框 -->
+  <view wx:if="{{!isAdmin && !isAgent && !isServiceProvider}}" class="card admin-entry-card">
+    <view class="admin-entry-item" bindtap="showAdminLogin" hover-class="menu-item-hover">
+      <text class="menu-icon">🔐</text>
+      <text class="menu-title">管理员登录</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 管理员登录弹窗 -->
+  <view hidden="{{!showLoginModal}}" class="modal-mask" bindtap="onMaskTap">
+    <view class="modal-dialog" catchtap="preventTap">
+      <text class="modal-title">管理员登录</text>
+      <view class="modal-body">
+        <input class="modal-input" placeholder="请输入账号（手机号或登录账号）" type="text" value="{{adminAccount}}" bindinput="onAdminAccountInput" maxlength="11" />
+        <input class="modal-input" placeholder="请输入密码" password="true" value="{{adminPassword}}" bindinput="onAdminPasswordInput" maxlength="64" />
+      </view>
+      <view class="modal-footer">
+        <view class="modal-btn modal-btn-cancel" bindtap="hideAdminLogin" hover-class="menu-item-hover">取消</view>
+        <view class="modal-btn modal-btn-confirm" bindtap="doAdminLogin" hover-class="menu-item-hover">登录</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="card">
+    <view class="menu-list">
+      <view
+        class="menu-item"
+        wx:for="{{menuItems}}"
+        wx:key="title"
+        data-url="{{item.url}}"
+        bindtap="navigateTo"
+        hover-class="menu-item-hover"
+      >
+        <text class="menu-icon">{{item.icon}}</text>
+        <text class="menu-title">{{item.title}}</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="btn-group">
+    <view class="menu-item" bindtap="navigateToReferral" hover-class="menu-item-hover">
+      <text class="menu-icon">👥</text>
+      <text class="menu-title">我的推荐</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <button class="btn btn-secondary" open-type="share" hover-class="btn-hover">分享给朋友</button>
+    <button class="btn btn-primary" bindtap="logout" hover-class="btn-hover">退出登录</button>
+  </view>
+
+  <!-- 规范：医疗合规免责声明 -->
+  <view class="declaration">
+    <text>本系统仅提供健康饮食建议，不构成医疗诊断。如有健康问题请咨询专业医师。</text>
+  </view>
+
+  <!-- ICP 备案号 -->
+  <icp-footer tabbar="{{true}}"></icp-footer>
+</view>

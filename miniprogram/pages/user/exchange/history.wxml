@@ -1,0 +1,73 @@
+<!--pages/user/exchange/history.wxml-->
+<wxs module="fmt">
+function formatDateTime(dt) {
+  if (!dt) return '';
+  var s = '' + dt;
+  s = s.replace('T', ' ');
+  if (s.length > 16) s = s.substring(0, 16);
+  return s;
+}
+module.exports = { formatDateTime: formatDateTime };
+</wxs>
+
+<view class="container">
+  <!-- 顶部标题 -->
+  <view class="page-title">兑换历史</view>
+
+  <!-- 兑换记录列表 -->
+  <view wx:if="{{history.length > 0}}" class="history-list">
+    <view class="exchange-card" wx:for="{{history}}" wx:key="id">
+      <view class="card-top">
+        <image
+          class="gift-img"
+          src="{{item.image || defaultGiftImage}}"
+          mode="aspectFill"
+          binderror="onImageError"
+          data-index="{{index}}"
+        ></image>
+        <view class="card-info">
+          <view class="gift-name">{{item.gift.name || '未知礼品'}}</view>
+          <view class="gift-points">消耗 +{{item.points}} 积分</view>
+          <view class="status-chip" style="color: {{item.statusColor}}; border-color: {{item.statusColor}};">{{item.statusName}}</view>
+        </view>
+      </view>
+
+      <!-- 核销码 -->
+      <view wx:if="{{item.write_off_code}}" class="code-row">
+        <view class="code-label">核销码</view>
+        <view class="code-value">{{item.write_off_code}}</view>
+        <view class="code-copy" data-code="{{item.write_off_code}}" catchtap="copyWriteOffCode">复制</view>
+      </view>
+
+      <!-- 核销日期 -->
+      <view wx:if="{{item.write_off_date}}" class="meta-row">
+        <text class="meta-label">核销日期：</text>
+        <text class="meta-value">{{fmt.formatDateTime(item.write_off_date)}}</text>
+      </view>
+
+      <!-- 兑换时间 -->
+      <view class="meta-row">
+        <text class="meta-label">兑换时间：</text>
+        <text class="meta-value">{{fmt.formatDateTime(item.created_at)}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="state-tip">
+    <view class="state-icon">⏳</view>
+    <view>加载中...</view>
+  </view>
+
+  <!-- 没有更多 -->
+  <view wx:elif="{{!hasMore && history.length > 0}}" class="state-tip">
+    <view>没有更多了</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{!loading && history.length === 0}}" class="state-tip">
+    <view class="state-icon">🎁</view>
+    <view>暂无兑换记录</view>
+    <button class="btn btn-primary empty-action-btn" bindtap="goExchange">去兑换礼品</button>
+  </view>
+</view>

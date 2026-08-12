@@ -1,0 +1,170 @@
+/* pages/service-provider/reports/reports.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 卡片 */
+.card {
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.header-card {
+  background-color: #ffffff;
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+.info-label {
+  color: #666;
+}
+
+.info-value {
+  color: #333;
+  font-weight: bold;
+}
+
+/* hover-class 点击反馈 */
+.btn-hover {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+.card-hover {
+  background-color: #f0f0f0;
+  transform: scale(0.99);
+}
+
+/* 报告列表 */
+.report-list {
+  margin-top: 0;
+}
+
+.report-card {
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.report-title {
+  flex: 1;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 20rpx;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.type-crisis_hook {
+  background-color: rgba(33, 150, 243, 0.15);
+  color: #2196F3;
+}
+
+.type-7day_plan {
+  background-color: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.report-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
+  margin-bottom: 16rpx;
+}
+
+.meta-item {
+  font-size: 18px;
+  color: #666666;
+  margin-right: 20rpx;
+}
+
+.risk-high {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.risk-medium {
+  color: #FF9800;
+  font-weight: bold;
+}
+
+.risk-low {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.report-content {
+  font-size: 18px;
+  color: #555555;
+  line-height: 1.6;
+  margin-bottom: 20rpx;
+  word-break: break-all;
+}
+
+/* 下载按钮 */
+.btn-download {
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  background-color: #2196F3;
+  color: #ffffff;
+  border: none;
+  font-size: 18px;
+  border-radius: 8rpx;
+}
+
+.btn-download[disabled] {
+  background-color: #90caf9;
+  color: #ffffff;
+}
+
+/* 空状态 / 加载状态 */
+.empty-state,
+.loading-state {
+  text-align: center;
+  padding: 60rpx 30rpx;
+  font-size: 18px;
+  color: #666666;
+}
+
+.empty-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 15rpx;
+}

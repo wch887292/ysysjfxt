@@ -1,0 +1,127 @@
+<!--pages/admin/dashboard/dashboard.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="title">管理控制台</text>
+  </view>
+
+  <!-- 核心指标 -->
+  <view class="card">
+    <text class="subtitle">核心指标</text>
+    <view class="metrics-grid">
+      <view class="metric-item">
+        <text class="metric-value">{{statistics.totalUsers}}</text>
+        <text class="metric-label">总用户数</text>
+      </view>
+      <view class="metric-item">
+        <text class="metric-value">{{statistics.totalAgents}}</text>
+        <text class="metric-label">服务商数量</text>
+      </view>
+      <view class="metric-item">
+        <text class="metric-value">{{statistics.totalMeals}}</text>
+        <text class="metric-label">餐食上传数</text>
+      </view>
+      <view class="metric-item">
+        <text class="metric-value">{{statistics.totalPointsIssued}}</text>
+        <text class="metric-label">发放积分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用户活跃度 -->
+  <view class="card">
+    <text class="subtitle">用户活跃度</text>
+    <view class="activity-grid">
+      <view class="activity-item">
+        <text class="activity-value">{{statistics.activeUsersToday}}</text>
+        <text class="activity-label">今日活跃</text>
+      </view>
+      <view class="activity-item">
+        <text class="activity-value">{{statistics.activeUsersWeek}}</text>
+        <text class="activity-label">本周活跃</text>
+      </view>
+      <view class="activity-item">
+        <text class="activity-value">{{statistics.activeUsersMonth}}</text>
+        <text class="activity-label">本月活跃</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 积分统计 -->
+  <view class="card">
+    <text class="subtitle">积分统计</text>
+    <view class="points-stats">
+      <view class="points-item">
+        <text class="points-label">已发放</text>
+        <text class="points-value">{{statistics.totalPointsIssued}}</text>
+      </view>
+      <view class="points-divider"></view>
+      <view class="points-item">
+        <text class="points-label">已使用</text>
+        <text class="points-value">{{statistics.totalPointsUsed}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 管理菜单 -->
+  <view class="card">
+    <text class="subtitle">管理菜单</text>
+    <view class="menu-grid">
+      <view class="menu-item" bindtap="navigateToAccounts" hover-class="menu-hover">
+        <text class="menu-icon">👤</text>
+        <text class="menu-text">账号管理</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToUsers" hover-class="menu-hover">
+        <text class="menu-icon">👥</text>
+        <text class="menu-text">用户管理</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToConfig" hover-class="menu-hover">
+        <text class="menu-icon">⚙️</text>
+        <text class="menu-text">系统配置</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToForbiddenWords" hover-class="menu-hover">
+        <text class="menu-icon">🚫</text>
+        <text class="menu-text">违禁词库</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToReports" hover-class="menu-hover">
+        <text class="menu-icon">📋</text>
+        <text class="menu-text">报告复核</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToArticles" hover-class="menu-hover">
+        <text class="menu-icon">📰</text>
+        <text class="menu-text">资讯管理</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToGifts" hover-class="menu-hover">
+        <text class="menu-icon">🎁</text>
+        <text class="menu-text">礼品管理</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToOrders" hover-class="menu-hover">
+        <text class="menu-icon">📦</text>
+        <text class="menu-text">订单管理</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToPoints" hover-class="menu-hover">
+        <text class="menu-icon">💰</text>
+        <text class="menu-text">积分管理</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToCommissions" hover-class="menu-hover">
+        <text class="menu-icon">💳</text>
+        <text class="menu-text">分润管理</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToWriteOffs" hover-class="menu-hover">
+        <text class="menu-icon">📝</text>
+        <text class="menu-text">核销记录</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToPrompts" hover-class="menu-hover">
+        <text class="menu-icon">🤖</text>
+        <text class="menu-text">Prompt管理</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToPostsReview" hover-class="menu-hover">
+        <text class="menu-icon">🔍</text>
+        <text class="menu-text">内容审核</text>
+      </view>
+      <view class="menu-item" bindtap="navigateToSystemSettings" hover-class="menu-hover">
+        <text class="menu-icon">🔧</text>
+        <text class="menu-text">系统设置</text>
+      </view>
+    </view>
+  </view>
+</view>

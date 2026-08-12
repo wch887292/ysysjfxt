@@ -1,0 +1,35 @@
+/* ICP 备案页脚 */
+.icp-footer {
+  padding: 24rpx 20rpx 32rpx;
+  text-align: center;
+  /* 适配 iPhone 全面屏底部安全区 */
+  padding-bottom: calc(32rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+}
+
+/* tabBar 页面需额外抬高，避免被底部导航遮挡 */
+.icp-footer--tabbar {
+  padding-bottom: calc(140rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+}
+
+.icp-line {
+  display: block;
+  line-height: 1.8;
+}
+
+.icp-line-hover {
+  opacity: 0.6;
+}
+
+.icp-text {
+  /* 备案号为法定标识信息，非正文内容；#666 在 #f5f5f5 底色上对比度 5.0:1，满足 ≥4.5:1 */
+  font-size: 16px;
+  color: #666666;
+  letter-spacing: 1rpx;
+}
+
+.icp-sub {
+  font-size: 16px;
+  color: #666666;
+}

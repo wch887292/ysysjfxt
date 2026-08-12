@@ -1,0 +1,86 @@
+<!--pages/user/exchange/exchange.wxml-->
+<wxs module="util">
+function inArray(arr, val) {
+  if (!arr || arr.length === undefined) return false;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] === val) return true;
+  }
+  return false;
+}
+function formatStock(stock) {
+  if (stock === -1) return '充足';
+  if (stock === 0) return '已兑完';
+  return '剩' + stock + '件';
+}
+module.exports = { inArray: inArray, formatStock: formatStock };
+</wxs>
+
+<view class="container">
+  <!-- 积分显示 -->
+  <view class="card points-card">
+    <view class="points-label">可用积分</view>
+    <view class="points-value">{{points}}</view>
+  </view>
+
+  <!-- 兑换历史入口 -->
+  <view class="history-entry" bindtap="navigateToHistory">
+    <text class="history-entry-text">兑换历史</text>
+    <text class="history-entry-arrow">›</text>
+  </view>
+
+  <!-- 礼品列表 -->
+  <view class="card gifts-card">
+    <view class="subtitle">可兑换礼品</view>
+
+    <!-- 分类筛选 -->
+    <scroll-view scroll-x class="category-bar" enhanced show-scrollbar="{{false}}">
+      <view class="cat-item {{currentCategory === 'all' ? 'active' : ''}}" data-cat="all" catchtap="onCategoryTap">全部</view>
+      <view class="cat-item {{currentCategory === 'food' ? 'active' : ''}}" data-cat="food" catchtap="onCategoryTap">美食</view>
+      <view class="cat-item {{currentCategory === 'health' ? 'active' : ''}}" data-cat="health" catchtap="onCategoryTap">健康</view>
+      <view class="cat-item {{currentCategory === 'service' ? 'active' : ''}}" data-cat="service" catchtap="onCategoryTap">服务</view>
+      <view class="cat-item {{currentCategory === 'coupon' ? 'active' : ''}}" data-cat="coupon" catchtap="onCategoryTap">优惠券</view>
+    </scroll-view>
+
+    <view wx:if="{{!loading && filteredGifts.length > 0}}" class="gifts-list">
+      <view class="gift-item" wx:for="{{filteredGifts}}" wx:key="id">
+        <view class="gift-image-wrap">
+          <image
+            class="gift-image"
+            src="{{item.image || defaultGiftImage}}"
+            mode="aspectFill"
+            binderror="onImageError"
+            data-id="{{item.id}}"
+          ></image>
+          <view class="gift-cat-tag">{{item.category}}</view>
+        </view>
+        <view class="gift-info">
+          <view class="gift-name">{{item.name}}</view>
+          <view class="gift-description">{{item.description}}</view>
+          <view class="gift-stock">库存：{{util.formatStock(item.stock)}}</view>
+          <view class="gift-bottom">
+            <view class="gift-points">{{item.points}} 积分</view>
+            <view
+              class="btn-exchange {{points < item.points || item.stock === 0 ? 'disabled' : ''}}"
+              data-id="{{item.id}}"
+              catchtap="exchangeGift"
+              hover-class="btn-hover"
+              hover-stay-time="100"
+            >
+              {{points < item.points ? '积分不足' : (item.stock === 0 ? '已兑完' : '兑换')}}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{loading}}" class="state-tip">
+      <view class="state-icon">⏳</view>
+      <view>加载中...</view>
+    </view>
+
+    <view wx:else class="state-tip">
+      <view class="state-icon">🎁</view>
+      <view>暂无可兑换礼品</view>
+    </view>
+  </view>
+</view>

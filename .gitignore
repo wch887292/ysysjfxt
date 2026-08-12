@@ -1,0 +1,128 @@
+# ==========================================================
+# 元生AI生态健康饮食积分系统 —— 版本控制忽略规则
+#
+# 首要原则：任何含真实密钥的文件都不得进入版本库。
+# 已知历史风险：server/ 下曾出现 "- 副本20260729.env.txt" 这类
+# 明文凭据备份（含数据库密码、JWT/AES 密钥、OSS AK/SK），
+# 命名不以 .env 开头，普通的 ".env*" 规则拦不住，故下方按后缀与关键词双重兜底。
+# ==========================================================
+
+# ---------- 密钥与环境变量 ----------
+.env
+.env.local
+.env.docker
+.env.production
+.env.development
+.env.test
+*.env
+*.env.txt
+*.env.bak
+.dev-keys/
+# 例外：以下为占位符模板，需要纳入版本库
+!.env.example
+!.env.docker.template
+!.env.production.template
+
+# ---------- 三重加密密钥源（绝不入库）----------
+# keys/ 含 vault.key(0600) 与 instance.id(机器指纹)，是解密系统密钥的必备材料，
+# 只能存在于部署目标服务器本地，不得进入版本库，也不得进入部署包。
+keys/
+server/keys/
+# 加密后的环境文件（密文，可随部署包发布到服务器，但不入库）
+.env.enc
+server/.env.enc
+# 解密排查产物（含明文，严禁留存/入库）
+.env.decrypted
+server/.env.decrypted
+
+# ---------- 证书与私钥 ----------
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# ---------- 各类备份文件（明文凭据高发区）----------
+*.bak
+*.old
+*.orig
+*副本*
+*备份*
+*_backup.*
+*-backup.*
+
+# ---------- 依赖 ----------
+node_modules/
+**/node_modules/
+.pnpm-store/
+
+# ---------- 构建产物 ----------
+dist/
+dist-verify/
+build/
+admin-web/dist/
+admin-dist.zip
+android-app/android/app/build/
+android-app/android/build/
+*.apk
+*.aab
+
+# ---------- 日志与运行时 ----------
+logs/
+*.log
+debug.log
+npm-debug.log*
+yarn-error.log*
+pids/
+*.pid
+
+# ---------- 用户上传内容 ----------
+# server/uploads/ 为用户运行时上传目录（整目录忽略）；server/public/images/ 为随包静态资源，全部入库
+server/uploads/
+# 保留 uploads 目录占位文件，防止部署后目录缺失
+!server/uploads/**/.gitkeep
+# ---------- 运行时状态标记（不入库） ----------
+server/data/
+
+# ---------- 编辑器与系统 ----------
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ---------- 临时与审计中间产物 ----------
+*.tmp
+*.temp
+.tmp/
+doc_content.txt
+docx_content.txt
+full_audit_dump.json
+review_100_report.txt
+# 开发期一次性审计脚本（不入库）
+audit_docx.py
+extract_docx.py
+read_docx.py
+fix_docx.py
+review_100.py
+ps_syntax_check.txt
+
+# ---------- 商业授权与安全文档（公开仓库严禁携带） ----------
+# 授权激活机制（60天试用/密钥激活/5层防破解）与安全审计漏洞细节，入库将暴露破解路径
+LICENSE-MANUAL.md
+激活码生成器.md
+security-audit-report.md
+docs/防黑客攻击报告.md
+
+# ---------- 工作区内部数据（记忆/日志，绝不入库） ----------
+.workbuddy/
+
+# ---------- 小程序 ----------
+miniprogram/.miniprogram_cache/
+project.private.config.json
+
+# ---------- Expo / React Native ----------
+android-app/.expo/
+*.orig

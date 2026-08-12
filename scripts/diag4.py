@@ -1,0 +1,20 @@
+import os, paramiko
+HOST=os.environ.get("SSH_HOST","111.229.190.132"); PORT=int(os.environ.get("SSH_PORT","22"))
+USER=os.environ.get("SSH_USER","root"); PW=os.environ.get("SSH_PW","")
+def run(c,cmd,t=30):
+    i,o,e=c.exec_command(cmd,timeout=t); out=o.read().decode("utf-8","replace"); err=e.read().decode("utf-8","replace"); rc=o.channel.recv_exit_status(); return out,err,rc
+c=paramiko.SSHClient(); c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+c.connect(HOST,port=PORT,username=USER,password=PW,timeout=15,look_for_keys=False,allow_agent=False)
+print("=== docker-compose.yml ===")
+out,_,_=run(c,"cat /www/wwwroot/rry.klai.top/docker-compose.yml 2>/dev/null")
+print(out.strip())
+print("=== ysjfxt-backend 挂载/环境/命令 ===")
+out,_,_=run(c,"docker inspect ysjfxt-backend --format 'MOUNTS: {{json .Mounts}}\\nENV: {{json .Config.Env}}\\nCMD: {{json .Config.Cmd}}\\nENTRY: {{json .Config.Entrypoint}}\\nRESTART: {{.HostConfig.RestartPolicy.Name}}\\nWORKDIR: {{.Config.WorkingDir}}' 2>/dev/null")
+print(out.strip())
+print("=== 容器内实际工作目录与文件 ===")
+out,_,_=run(c,"docker exec ysjfxt-backend sh -c 'pwd; echo ---; ls -la .env .env.enc keys 2>/dev/null; echo --- app.js 首行 ---; head -12 app.js' 2>/dev/null")
+print(out.strip())
+print("=== 后端健康检查(容器内IP) ===")
+out,_,_=run(c,"curl -s -m 5 -o /dev/null -w 'live=%{http_code}\\n' http://172.20.0.2:3001/api/health/live; curl -s -m 5 http://172.20.0.2:3001/api/health 2>/dev/null | head -c 200", t=20)
+print(out.strip())
+c.close()

@@ -1,0 +1,56 @@
+<view class="container">
+  <!-- 顶部用户信息栏 -->
+  <view class="user-bar">
+    <text class="user-name">{{userName}}</text>
+    <text class="user-label">报告列表</text>
+  </view>
+
+  <!-- 报告列表 -->
+  <view class="report-list" wx:if="{{reports.length > 0}}">
+    <view class="report-item {{selectedId === item.id ? 'report-active' : ''}}"
+      wx:for="{{reports}}" wx:key="id"
+      data-id="{{item.id}}" bindtap="selectReport" hover-class="report-hover">
+      <view class="report-title">{{item.title || '报告'}}</view>
+      <view class="report-date">{{item.created_at || ''}}</view>
+    </view>
+  </view>
+
+  <!-- 空状态提示 -->
+  <view class="empty-tip" wx:if="{{reports.length === 0 && !loading}}">
+    <text>暂无报告记录</text>
+  </view>
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 编辑区域 -->
+  <view class="editor-section" wx:if="{{selectedId}}">
+    <view class="editor-header">
+      <text class="editor-title">编辑报告内容</text>
+      <text class="change-hint" wx:if="{{contentChanged}}">（已修改）</text>
+    </view>
+    <textarea class="editor-area"
+      value="{{content}}"
+      bindinput="onContentInput"
+      placeholder="请输入报告内容"
+      maxlength="-1"
+      auto-height="{{false}}">
+    </textarea>
+  </view>
+
+  <!-- 违禁词检测结果提示 -->
+  <view class="warning-bar" wx:if="{{warningWords.length > 0}}">
+    <text class="warning-icon">⚠</text>
+    <text class="warning-text">检测到违禁词：{{warningWords.join('、')}}</text>
+  </view>
+
+  <!-- 底部保存按钮 -->
+  <view class="bottom-bar" wx:if="{{selectedId}}">
+    <button class="btn-save"
+      bindtap="saveReport"
+      hover-class="btn-save-hover"
+      disabled="{{saving || !contentChanged}}">
+      {{saving ? '保存中...' : '保存修改'}}
+    </button>
+  </view>
+</view>

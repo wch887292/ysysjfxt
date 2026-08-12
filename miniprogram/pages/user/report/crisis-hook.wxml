@@ -1,0 +1,79 @@
+<!--pages/user/report/crisis-hook.wxml-->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">危机钩子报告</text>
+    <text class="page-subtitle">基于问卷信息的健康风险分析</text>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading-tip">加载中...</view>
+  </block>
+
+  <block wx:elif="{{!report}}">
+    <view class="empty-state">
+      <view class="empty-text">暂无报告</view>
+      <view class="empty-desc">完成问卷后可生成您的危机钩子报告</view>
+      <button class="primary-btn" bindtap="generateReport" loading="{{generating}}" disabled="{{generating}}">
+        {{generating ? '生成中...' : '立即生成报告'}}
+      </button>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="report-card">
+      <text class="report-title">{{report.title}}</text>
+
+      <view class="report-meta">
+        <view class="meta-row">
+          <text class="meta-label">风险评分</text>
+          <text class="meta-value score-value">{{report.riskScore}}</text>
+        </view>
+        <view class="meta-row">
+          <text class="meta-label">风险等级</text>
+          <view class="chip {{report.riskLevelCls}}">{{report.riskLevelText}}</view>
+        </view>
+        <view class="meta-row" wx:if="{{report.generatedDate}}">
+          <text class="meta-label">生成日期</text>
+          <text class="meta-value">{{report.generatedDate}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="content-card">
+      <view class="section-header">
+        <text class="section-title">报告内容</text>
+        <view class="voice-btn {{speaking ? 'speaking' : ''}}" bindtap="toggleSpeak" hover-class="btn-hover">
+          <text class="voice-icon">{{speaking ? '⏸' : '🔊'}}</text>
+          <text class="voice-text">{{speaking ? '停止' : '语音播报'}}</text>
+        </view>
+      </view>
+      <block wx:for="{{report.sections}}" wx:key="index">
+        <view class="section-item">
+          <text wx:if="{{item.title}}" class="section-item-title">{{item.title}}</text>
+          <text class="section-item-text">{{item.text}}</text>
+        </view>
+      </block>
+      <view wx:if="{{report.sections.length === 0}}" class="empty-text">暂无详细内容</view>
+    </view>
+
+    <view class="disclaimer-card">
+      <text class="disclaimer-title">免责声明</text>
+      <text class="disclaimer-text">本报告为饮食健康风险评估，基于您提供的信息进行 AI 分析生成。报告结果仅供参考，不作为疾病诊断依据。如需详细解读，请咨询服务商或专业医师。</text>
+    </view>
+
+    <!-- P0修复：引导到店 CTA —— 游客/用户看到报告后的转化触点 -->
+    <view class="cta-card">
+      <text class="cta-title">需要详细解读？</text>
+      <text class="cta-desc">到店咨询专业健康顾问，获取完整7天调理方案</text>
+      <view class="cta-actions">
+        <button class="cta-btn call-btn" bindtap="callStore" hover-class="btn-hover">电话咨询</button>
+        <button class="cta-btn questionnaire-btn" bindtap="goQuestionnaire" hover-class="btn-hover" wx:if="{{!isMember}}">升级会员</button>
+      </view>
+    </view>
+
+    <button class="download-btn" bindtap="downloadReport" loading="{{downloading}}" disabled="{{downloading}}">
+      {{downloading ? '下载中...' : '下载报告 PDF'}}
+    </button>
+    <view class="download-tip">会员每月限下载1次</view>
+  </block>
+</view>

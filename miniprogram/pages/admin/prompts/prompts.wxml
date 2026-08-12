@@ -1,0 +1,79 @@
+<!--pages/admin/prompts/prompts.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="flex-between">
+      <text class="subtitle">Prompt版本管理</text>
+      <button class="btn-add" bindtap="onShowCreate" hover-class="btn-hover">+ 新建版本</button>
+    </view>
+
+    <view wx:if="{{prompts.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{prompts}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-name">{{item.prompt_key}}</text>
+          <text class="item-tag tag-{{item.status}}">{{item.status === 'active' ? '已激活' : item.status === 'draft' ? '草稿' : '已归档'}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">版本：v{{item.version}} ｜ 创建时间：{{item.created_at}}</text>
+          <text wx:if="{{item.change_log}}" class="info-text">变更说明：{{item.change_log}}</text>
+        </view>
+        <view class="item-actions">
+          <button class="btn-action" data-id="{{item.id}}" bindtap="onViewDetail" hover-class="btn-hover">详情</button>
+          <button wx:if="{{item.status !== 'active'}}" class="btn-action btn-primary" data-id="{{item.id}}" bindtap="onActivate" hover-class="btn-hover">激活</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无Prompt版本</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 新建Prompt弹窗 -->
+<view class="modal-mask" wx:if="{{showCreateModal}}" bindtap="onCancelCreate">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">新建Prompt版本</text>
+    <view class="form-group">
+      <text class="form-label">Prompt类型</text>
+      <picker range="{{['crisis_hook_system', 'crisis_hook_user', '7day_plan_system', '7day_plan_user']}}" value="{{newPrompt.promptKey}}" bindchange="onKeyChange">
+        <view class="form-input picker-value">{{newPrompt.promptKey}}</view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <text class="form-label">内容</text>
+      <textarea class="form-textarea" placeholder="请输入Prompt内容（至少10字符）" value="{{newPrompt.content}}" bindinput="onContentInput" auto-height maxlength="-1" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">变更说明</text>
+      <input class="form-input" placeholder="可选，说明本次变更" value="{{newPrompt.changeLog}}" bindinput="onChangeLogInput" />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onCreatePrompt" hover-class="btn-hover">创建</button>
+      <button class="btn btn-secondary" bindtap="onCancelCreate" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 详情弹窗 -->
+<view class="modal-mask" wx:if="{{showDetailModal}}" bindtap="onCloseDetail">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">Prompt详情</text>
+    <view wx:if="{{currentPrompt}}" class="detail-info">
+      <text class="info-text">类型：{{currentPrompt.prompt_key}}</text>
+      <text class="info-text">版本：v{{currentPrompt.version}}</text>
+      <text class="info-text">状态：{{currentPrompt.status === 'active' ? '已激活' : currentPrompt.status === 'draft' ? '草稿' : '已归档'}}</text>
+      <text class="info-text">变更说明：{{currentPrompt.change_log || '-'}}</text>
+      <text class="info-text">创建时间：{{currentPrompt.created_at}}</text>
+      <view class="content-box">
+        <text class="content-text">{{currentPrompt.content}}</text>
+      </view>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-secondary" bindtap="onCloseDetail" hover-class="btn-hover">关闭</button>
+    </view>
+  </view>
+</view>

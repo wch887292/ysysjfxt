@@ -1,0 +1,43 @@
+<!--pages/user/articles/detail.wxml-->
+<view class="container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+
+  <!-- 文章内容 -->
+  <block wx:elif="{{article}}">
+    <!-- 封面图 -->
+    <image
+      wx:if="{{article.cover_image}}"
+      class="cover-image"
+      src="{{article.cover_image}}"
+      mode="aspectFill"
+      binderror="onImageError"
+    />
+
+    <!-- 文章头部 -->
+    <view class="article-header">
+      <text class="article-title">{{article.title}}</text>
+      <view class="article-meta">
+        <text class="meta-tag">{{article.categoryLabel}}</text>
+        <text class="meta-date">{{article.publishedAt}}</text>
+        <text class="meta-views">{{article.view_count || 0}}次浏览</text>
+      </view>
+    </view>
+
+    <!-- 文章正文 -->
+    <view class="article-content">
+      <rich-text nodes="{{article.contentHtml}}"></rich-text>
+    </view>
+
+    <!-- 免责声明 -->
+    <view class="disclaimer">
+      <text>免责声明：本资讯仅提供健康饮食参考信息，不构成医疗诊断或治疗建议。如有健康问题请咨询专业医师。</text>
+    </view>
+  </block>
+
+  <!-- 未找到 -->
+  <view wx:else class="empty-state">
+    <text class="empty-icon">📰</text>
+    <text>资讯不存在或已下架</text>
+  </view>
+</view>

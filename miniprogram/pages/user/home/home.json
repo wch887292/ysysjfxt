@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "privacy-popup": "/components/privacy-popup/privacy-popup",
+    "icp-footer": "/components/icp-footer/icp-footer"
+  }
+}

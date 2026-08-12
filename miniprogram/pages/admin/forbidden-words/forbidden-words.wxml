@@ -1,0 +1,98 @@
+<!--pages/admin/forbidden-words/forbidden-words.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="flex-between">
+      <text class="subtitle">违禁词库</text>
+      <button class="btn-add" bindtap="onShowAdd" hover-class="btn-hover">+ 添加违禁词</button>
+    </view>
+
+    <view wx:if="{{words.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{words}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-word">{{item.pattern}}</text>
+          <text class="item-tag cat-{{item.category}}">{{item.category === 'general' ? '通用' : item.category === 'medical' ? '医疗' : item.category}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">提示信息：{{item.message || '-'}}</text>
+          <text class="info-text">状态：{{item.status === 'active' ? '启用' : '禁用'}} ｜ 备注：{{item.note || '-'}}</text>
+        </view>
+        <view class="item-actions">
+          <button class="btn-action" data-item="{{item}}" bindtap="onEditWord" hover-class="btn-hover">编辑</button>
+          <button class="btn-action btn-danger" data-id="{{item.id}}" data-word="{{item.pattern}}" bindtap="onDeleteWord" hover-class="btn-hover">删除</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无违禁词</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 添加违禁词弹窗 -->
+<view class="modal-mask" wx:if="{{showAddModal}}" bindtap="onCancelAdd">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">添加规则</text>
+    <view class="form-group">
+      <text class="form-label">正则表达式 *</text>
+      <input class="form-input" placeholder="请输入正则表达式" value="{{newWord.pattern}}" bindinput="onNewWordInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">提示信息</text>
+      <input class="form-input" placeholder="请输入提示信息" value="{{newWord.message}}" bindinput="onNewMessageInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">分类</text>
+      <picker range="{{['general', 'medical', 'advertising']}}" value="{{newWord.category}}" bindchange="onNewCategoryChange">
+        <view class="form-input picker-value">{{newWord.category === 'general' ? '通用' : newWord.category === 'medical' ? '医疗' : '广告'}}</view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <text class="form-label">备注</text>
+      <input class="form-input" placeholder="请输入备注" value="{{newWord.note}}" bindinput="onNewNoteInput" />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onAddWord" hover-class="btn-hover">确认添加</button>
+      <button class="btn btn-secondary" bindtap="onCancelAdd" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 编辑违禁词弹窗 -->
+<view class="modal-mask" wx:if="{{showEditModal}}" bindtap="onCancelEdit">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">编辑规则</text>
+    <view class="form-group">
+      <text class="form-label">正则表达式 *</text>
+      <input class="form-input" placeholder="请输入正则表达式" value="{{editPattern}}" bindinput="onEditWordInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">提示信息</text>
+      <input class="form-input" placeholder="请输入提示信息" value="{{editMessage}}" bindinput="onEditMessageInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">分类</text>
+      <picker range="{{['general', 'medical', 'advertising']}}" value="{{editCategory}}" bindchange="onEditCategoryChange">
+        <view class="form-input picker-value">{{editCategory === 'general' ? '通用' : editCategory === 'medical' ? '医疗' : '广告'}}</view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <text class="form-label">备注</text>
+      <input class="form-input" placeholder="请输入备注" value="{{editNote}}" bindinput="onEditNoteInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">状态</text>
+      <picker range="{{['active', 'inactive']}}" value="{{editStatus}}" bindchange="onEditStatusChange">
+        <view class="form-input picker-value">{{editStatus === 'active' ? '启用' : '禁用'}}</view>
+      </picker>
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmEdit" hover-class="btn-hover">确认</button>
+      <button class="btn btn-secondary" bindtap="onCancelEdit" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

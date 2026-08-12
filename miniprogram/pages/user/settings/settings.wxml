@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="form-card">
+    <view class="form-item">
+      <text class="form-label">昵称</text>
+      <input class="form-input" value="{{nickName}}" placeholder="请输入昵称（支持非实名）"
+        maxlength="20" bindinput="onNickNameInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">手机号</text>
+      <input class="form-input" value="{{phone}}" type="number" placeholder="选填，用于找回账号"
+        maxlength="11" bindinput="onPhoneInput" />
+    </view>
+    <view class="form-tip">
+      <text>提示：本系统支持非实名注册，手机号为选填项，仅用于找回账号。您的信息将被严格保密。</text>
+    </view>
+  </view>
+
+  <button class="save-btn" bindtap="saveSettings">保存设置</button>
+  <button class="clear-btn" bindtap="clearCache">清除缓存</button>
+
+  <!-- ICP 备案号 -->
+  <icp-footer></icp-footer>
+</view>

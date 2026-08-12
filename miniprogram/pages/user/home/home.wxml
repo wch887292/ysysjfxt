@@ -1,0 +1,125 @@
+<!--pages/user/home/home.wxml-->
+<view class="container">
+  <!-- 未登录时显示登录界面 -->
+  <view class="login-card" wx:if="{{!isLogged}}">
+    <view class="login-logo">🥗</view>
+    <view class="login-title">健康饮食积分系统</view>
+    <view class="login-desc">让健康饮食成为一种习惯</view>
+    <button class="login-btn" bindtap="doLogin">微信登录</button>
+  </view>
+
+  <!-- 已登录时显示主界面 -->
+  <block wx:else>
+  <!-- 用户信息卡片 -->
+  <view class="card user-card">
+    <view class="user-header">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="username">{{userInfo.nickName}}</text>
+        <text class="user-level">健康达人 Lv.{{userLevel}}</text>
+      </view>
+    </view>
+
+    <view class="stats-row">
+      <view class="stat-item">
+        <text class="stat-value">{{points}}</text>
+        <text class="stat-label">总积分</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-value">{{todayPoints}}</text>
+        <text class="stat-label">今日积分</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-value">{{ranking}}</text>
+        <text class="stat-label">排名</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 核心功能入口 -->
+  <view class="section-title">核心功能</view>
+  <view class="feature-grid">
+    <view class="feature-item" bindtap="navigateToUpload" hover-class="feature-hover">
+      <text class="feature-icon">📸</text>
+      <text class="feature-text">每日打卡</text>
+    </view>
+    <view class="feature-item" bindtap="navigateToQuestionnaire" hover-class="feature-hover">
+      <text class="feature-icon">📋</text>
+      <text class="feature-text">健康评估</text>
+    </view>
+    <view class="feature-item" bindtap="navigateToCourse" hover-class="feature-hover">
+      <text class="feature-icon">📚</text>
+      <text class="feature-text">课程学习</text>
+    </view>
+    <view class="feature-item" bindtap="navigateToCrisisReport" hover-class="feature-hover">
+      <text class="feature-icon">📊</text>
+      <text class="feature-text">报告查看</text>
+    </view>
+    <view class="feature-item" bindtap="navigateToReferral" hover-class="feature-hover">
+      <text class="feature-icon">👥</text>
+      <text class="feature-text">拉新拓客</text>
+    </view>
+    <view class="feature-item" bindtap="navigateToExchange" hover-class="feature-hover">
+      <text class="feature-icon">🎁</text>
+      <text class="feature-text">积分商城</text>
+    </view>
+    <view class="feature-item" bindtap="navigateToArticles" hover-class="feature-hover">
+      <text class="feature-icon">📰</text>
+      <text class="feature-text">资讯阅读</text>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="section-title">快捷入口</view>
+  <view class="quick-actions">
+    <view class="action-item" bindtap="navigateToUpload">
+      <text class="action-icon">📸</text>
+      <text class="action-text">上传餐食</text>
+    </view>
+    <view class="action-item" bindtap="navigateToExchange" hover-class="action-hover">
+      <text class="action-icon">🎁</text>
+      <text class="action-text">兑换礼品</text>
+    </view>
+    <navigator url="/pages/user/questionnaire/questionnaire" class="action-item">
+      <text class="action-icon">📋</text>
+      <text class="action-text">健康问卷</text>
+    </navigator>
+  </view>
+
+  <!-- 最近餐食 -->
+  <view class="card">
+    <view class="card-header">
+      <text class="subtitle">最近上传</text>
+      <text class="view-all" bindtap="navigateToStatistics" wx:if="{{recentMeals.length > 0}}">查看全部 ></text>
+    </view>
+    <view class="meal-list" wx:if="{{recentMeals.length > 0}}">
+      <view class="meal-item" wx:for="{{recentMeals}}" wx:key="id" bindtap="navigateToStatistics" hover-class="meal-item-hover">
+        <image class="meal-image" src="{{item.imageUrl}}" mode="aspectFill"></image>
+        <view class="meal-info">
+          <text class="meal-type">{{item.mealType}}</text>
+          <text class="meal-points">+{{item.points}} 积分</text>
+          <text class="meal-time">{{item.uploadTime}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">🍽️</text>
+      <text>还没有上传记录,快去上传吧!</text>
+      <button class="btn btn-primary empty-upload-btn" bindtap="navigateToUpload">立即上传</button>
+    </view>
+  </view>
+
+  <!-- 声明 -->
+  <view class="declaration">
+    <text>本系统仅提供健康饮食建议,不构成医疗诊断。如有健康问题请咨询专业医师。</text>
+  </view>
+  </block>
+
+  <!-- ICP 备案号 -->
+  <icp-footer tabbar="{{true}}"></icp-footer>
+
+  <!-- 隐私协议弹窗 -->
+  <privacy-popup show="{{showPrivacyPopup}}" bind:agree="onPrivacyAgree"></privacy-popup>
+</view>

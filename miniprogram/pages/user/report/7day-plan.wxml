@@ -1,0 +1,62 @@
+<!--pages/user/report/7day-plan.wxml-->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">7天调理方案</text>
+    <text class="page-subtitle">个性化饮食与生活方式建议</text>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading-tip">加载中...</view>
+  </block>
+
+  <block wx:elif="{{!plan}}">
+    <view class="empty-state">
+      <view class="empty-text">暂无方案</view>
+      <view class="empty-desc">完成问卷后将为您生成7天调理方案</view>
+      <button class="primary-btn" bindtap="goQuestionnaire">去填写问卷</button>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="plan-card">
+      <text class="plan-title">{{plan.title}}</text>
+
+      <view class="plan-meta">
+        <view class="meta-row">
+          <text class="meta-label">风险评分</text>
+          <text class="meta-value score-value">{{plan.riskScore}}</text>
+        </view>
+        <view class="meta-row">
+          <text class="meta-label">风险等级</text>
+          <view class="chip {{plan.riskLevelCls}}">{{plan.riskLevelText}}</view>
+        </view>
+        <view class="meta-row" wx:if="{{plan.generatedDate}}">
+          <text class="meta-label">生成日期</text>
+          <text class="meta-value">{{plan.generatedDate}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="content-card">
+      <text class="section-title">方案内容</text>
+      <block wx:for="{{plan.sections}}" wx:key="index">
+        <view class="section-item">
+          <text wx:if="{{item.title}}" class="section-item-title">{{item.title}}</text>
+          <text class="section-item-text">{{item.text}}</text>
+        </view>
+      </block>
+      <view wx:if="{{plan.sections.length === 0}}" class="empty-text">暂无详细内容</view>
+    </view>
+
+    <view class="store-card">
+      <text class="store-title">引导到店</text>
+      <text class="store-text">如需专业指导，请前往最近服务网点。</text>
+      <button class="call-btn" bindtap="callStore">电话咨询 400-888-8888</button>
+    </view>
+
+    <view class="disclaimer-card">
+      <text class="disclaimer-title">免责声明</text>
+      <text class="disclaimer-text">本方案为饮食与生活方式建议，不能替代任何医疗诊断、治疗及医嘱。方案仅用于促进健康饮食调整，不作为疾病治疗依据。在采纳任何建议前，尤其涉及健康问题时，请务必咨询专业医师。</text>
+    </view>
+  </block>
+</view>

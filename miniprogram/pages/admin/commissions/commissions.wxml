@@ -1,0 +1,64 @@
+<!--pages/admin/commissions/commissions.wxml-->
+<view class="container">
+  <!-- 汇总卡片 -->
+  <view class="card" wx:if="{{summary}}">
+    <text class="subtitle">分润汇总</text>
+    <view class="summary-grid">
+      <view class="summary-item">
+        <text class="summary-value">{{summary.totalAmount || 0}}</text>
+        <text class="summary-label">总金额</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value">{{summary.pendingAmount || 0}}</text>
+        <text class="summary-label">待结算</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value">{{summary.settledAmount || 0}}</text>
+        <text class="summary-label">已结算</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="flex-between">
+      <text class="subtitle">分润记录</text>
+      <button class="btn-add" bindtap="onShowSettle" hover-class="btn-hover">结算</button>
+    </view>
+
+    <view wx:if="{{commissions.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{commissions}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-name">ID: {{item.id}}</text>
+          <text class="item-tag {{item.status === 'settled' ? 'tag-settled' : 'tag-pending'}}">{{item.status === 'settled' ? '已结算' : '待结算'}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">来源：{{item.source || '-'}} ｜ 金额：¥{{item.amount || 0}}</text>
+          <text class="info-text">受益人：{{item.beneficiary_id || '-'}} ｜ 时间：{{item.created_at || '-'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无分润记录</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 结算弹窗 -->
+<view class="modal-mask" wx:if="{{showSettleModal}}" bindtap="onCancelSettle">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">结算分润</text>
+    <view class="form-group">
+      <text class="form-label">分润记录ID（多个用逗号分隔）</text>
+      <textarea class="form-textarea" placeholder="如：1,2,3" value="{{settleIds}}" bindinput="onSettleIdsInput" auto-height />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmSettle" hover-class="btn-hover">确认结算</button>
+      <button class="btn btn-secondary" bindtap="onCancelSettle" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

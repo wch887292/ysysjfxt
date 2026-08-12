@@ -1,0 +1,178 @@
+<!--pages/user/upload/upload.wxml-->
+<wxs module="util">
+function inArray(arr, val) {
+  if (!arr || arr.length === undefined) return false;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] === val) return true;
+  }
+  return false;
+}
+module.exports = { inArray: inArray };
+</wxs>
+<view class="container">
+  <!-- 打卡模式切换 -->
+  <view class="mode-tabs">
+    <view class="mode-tab {{clockInMode === 'icon' ? 'active' : ''}}" bindtap="switchMode" data-mode="icon">
+      <text class="mode-icon">🍱</text>
+      <text class="mode-text">图标打卡</text>
+    </view>
+    <view class="mode-tab {{clockInMode === 'image' ? 'active' : ''}}" bindtap="switchMode" data-mode="image">
+      <text class="mode-icon">📸</text>
+      <text class="mode-text">拍照打卡</text>
+    </view>
+  </view>
+
+  <!-- 今日打卡概览 -->
+  <view class="card today-card">
+    <view class="today-header">
+      <text class="subtitle">今日打卡</text>
+      <text class="today-points">+{{todayTotalPoints}} 积分</text>
+    </view>
+    <view class="meals-status">
+      <view class="meal-badge {{todayRecords.breakfast ? 'done' : ''}}" bindtap="quickSelectMeal" data-meal="breakfast" hover-class="meal-hover">
+        <text class="meal-icon">🌅</text>
+        <text class="meal-label">早餐</text>
+        <text class="meal-check">{{todayRecords.breakfast ? '✓' : '○'}}</text>
+      </view>
+      <view class="meal-badge {{todayRecords.lunch ? 'done' : ''}}" bindtap="quickSelectMeal" data-meal="lunch" hover-class="meal-hover">
+        <text class="meal-icon">☀️</text>
+        <text class="meal-label">午餐</text>
+        <text class="meal-check">{{todayRecords.lunch ? '✓' : '○'}}</text>
+      </view>
+      <view class="meal-badge {{todayRecords.dinner ? 'done' : ''}}" bindtap="quickSelectMeal" data-meal="dinner" hover-class="meal-hover">
+        <text class="meal-icon">🌙</text>
+        <text class="meal-label">晚餐</text>
+        <text class="meal-check">{{todayRecords.dinner ? '✓' : '○'}}</text>
+      </view>
+    </view>
+    <view class="today-count">今日已打卡 {{todayCount}}/{{dailyLimit}} 次</view>
+  </view>
+
+  <view class="card">
+    <!-- 餐食类型选择 -->
+    <view class="form-group">
+      <text class="form-label">餐食类型</text>
+      <picker mode="selector" range="{{mealTypes}}" value="{{mealTypeIndex}}" bindchange="onMealTypeChange">
+        <view class="picker">
+          <text>{{mealTypes[mealTypeIndex]}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 图标打卡 -->
+    <block wx:if="{{clockInMode === 'icon'}}">
+      <view class="form-group">
+        <text class="form-label">选择食物图标（可多选，最多9个）</text>
+        <view class="icon-grid">
+          <view
+            wx:for="{{foodIconOptions}}"
+            wx:key="key"
+            class="icon-cell {{util.inArray(selectedIcons, item.key) ? 'selected' : ''}}"
+            bindtap="toggleIcon"
+            data-key="{{item.key}}"
+          >
+            <text class="icon-emoji">{{item.emoji}}</text>
+            <text class="icon-label">{{item.label}}</text>
+          </view>
+        </view>
+        <text class="form-hint">已选 {{selectedIcons.length}} 个</text>
+      </view>
+    </block>
+
+    <!-- 拍照打卡 -->
+    <block wx:if="{{clockInMode === 'image'}}">
+      <view class="form-group">
+        <text class="form-label">上传餐食图片</text>
+        <view class="upload-area" bindtap="chooseImage">
+          <image wx:if="{{imageUrl}}" class="preview-image" src="{{imageUrl}}" mode="aspectFill"></image>
+          <view wx:else class="upload-placeholder">
+            <text class="upload-icon">📸</text>
+            <text class="upload-text">点击上传餐食图片</text>
+            <text class="upload-hint">支持 JPG、PNG 格式，最大 10MB</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 遵循饮食计划 -->
+    <view class="form-group">
+      <view class="follow-plan-row" bindtap="toggleFollowPlan">
+        <view class="checkbox {{followPlan ? 'checked' : ''}}">
+          <text wx:if="{{followPlan}}" class="checkbox-mark">✓</text>
+        </view>
+        <view class="follow-plan-text">
+          <text class="follow-plan-title">遵循饮食计划</text>
+          <text class="follow-plan-desc">勾选可获得 +20 积分额外奖励</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- AI识别结果（仅拍照模式） -->
+    <view wx:if="{{clockInMode === 'image' && aiResult}}" class="ai-result">
+      <view class="result-header">
+        <text class="result-icon">🤖</text>
+        <text class="result-title">AI识别结果</text>
+      </view>
+      <view class="result-content">
+        <view class="result-item">
+          <text class="result-label">食物类型:</text>
+          <text class="result-value">{{aiResult.foodType}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">健康评分:</text>
+          <text class="result-value">{{aiResult.healthScore}}/100</text>
+        </view>
+      </view>
+      <view class="validation-status {{isValidContent ? 'valid' : 'invalid'}}">
+        <text class="status-icon">{{isValidContent ? '✓' : '✗'}}</text>
+        <text class="status-text">{{validationMessage}}</text>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <button
+      class="btn btn-primary"
+      bindtap="submitClockIn"
+      disabled="{{isSubmitting}}"
+    >
+      {{isSubmitting ? '提交中...' : '立即打卡'}}
+    </button>
+  </view>
+
+  <!-- 积分规则 -->
+  <view class="card">
+    <text class="subtitle">积分获取规则</text>
+    <view class="points-rules">
+      <view class="rule-item">
+        <text class="rule-icon">🍽️</text>
+        <view class="rule-content">
+          <text class="rule-title">每日三餐打卡</text>
+          <text class="rule-points">+10 积分/餐</text>
+        </view>
+      </view>
+      <view class="rule-item">
+        <text class="rule-icon">📋</text>
+        <view class="rule-content">
+          <text class="rule-title">遵循饮食计划</text>
+          <text class="rule-points">+20 积分/次</text>
+        </view>
+      </view>
+      <view class="rule-item">
+        <text class="rule-icon">📊</text>
+        <view class="rule-content">
+          <text class="rule-title">每日上限</text>
+          <text class="rule-points">最多3次</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 声明 -->
+  <view class="declaration">
+    <text>打卡信息将经过AI识别和内容安全验证。请确保上传真实餐食图片,禁止上传违规内容。</text>
+  </view>
+
+  <!-- ICP 备案号 -->
+  <icp-footer tabbar="{{true}}"></icp-footer>
+</view>

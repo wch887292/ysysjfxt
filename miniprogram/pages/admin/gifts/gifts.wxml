@@ -1,0 +1,107 @@
+<!--pages/admin/gifts/gifts.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="flex-between">
+      <text class="subtitle">礼品管理</text>
+      <button class="btn-add" bindtap="onShowCreate" hover-class="btn-hover">+ 添加礼品</button>
+    </view>
+
+    <view wx:if="{{gifts.length > 0}}" class="list">
+      <view class="list-item" wx:for="{{gifts}}" wx:key="id">
+        <view class="item-header">
+          <text class="item-name">{{item.name}}</text>
+          <text class="item-tag {{item.is_active ? 'tag-active' : 'tag-inactive'}}">{{item.is_active ? '启用' : '禁用'}}</text>
+        </view>
+        <view class="item-info">
+          <text class="info-text">所需积分：{{item.points}} ｜ 库存：{{item.stock || 0}}</text>
+        </view>
+        <view class="item-actions">
+          <button class="btn-action" data-item="{{item}}" bindtap="onEditGift" hover-class="btn-hover">编辑</button>
+          <button class="btn-action btn-danger" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="onDeleteGift" hover-class="btn-hover">删除</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text>暂无礼品</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>
+
+<!-- 创建礼品弹窗 -->
+<view class="modal-mask" wx:if="{{showCreateModal}}" bindtap="onCancelCreate">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">添加礼品</text>
+    <view class="form-group">
+      <text class="form-label">名称</text>
+      <input class="form-input" placeholder="请输入礼品名称" value="{{newGift.name}}" data-field="name" bindinput="onCreateInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">所需积分</text>
+      <input class="form-input" type="number" placeholder="请输入所需积分" value="{{newGift.points}}" data-field="points" bindinput="onCreateInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">库存</text>
+      <input class="form-input" type="number" placeholder="请输入库存数量" value="{{newGift.stock}}" data-field="stock" bindinput="onCreateInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">分类</text>
+      <picker range="{{['food', 'health', 'service', 'coupon', 'other']}}" value="{{newGift.category}}" bindchange="onNewCategoryChange">
+        <view class="form-input picker-value">{{newGift.category === 'food' ? '美食' : newGift.category === 'health' ? '健康' : newGift.category === 'service' ? '服务' : newGift.category === 'coupon' ? '优惠券' : '其他'}}</view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <text class="form-label">描述</text>
+      <textarea class="form-textarea" placeholder="请输入礼品描述" value="{{newGift.description}}" data-field="description" bindinput="onCreateInput" auto-height />
+    </view>
+    <view class="form-group">
+      <text class="form-label">现金价格</text>
+      <input class="form-input" type="digit" placeholder="请输入现金价格" value="{{newGift.cashPrice}}" data-field="cashPrice" bindinput="onCreateInput" />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onCreateGift" hover-class="btn-hover">确认添加</button>
+      <button class="btn btn-secondary" bindtap="onCancelCreate" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 编辑礼品弹窗 -->
+<view class="modal-mask" wx:if="{{showEditModal}}" bindtap="onCancelEdit">
+  <view class="modal-content" catchtap="">
+    <text class="modal-title">编辑礼品</text>
+    <view class="form-group">
+      <text class="form-label">名称</text>
+      <input class="form-input" placeholder="请输入礼品名称" value="{{editName}}" bindinput="onEditNameInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">所需积分</text>
+      <input class="form-input" type="number" placeholder="请输入所需积分" value="{{editPoints}}" bindinput="onEditPointsInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">库存</text>
+      <input class="form-input" type="number" placeholder="请输入库存数量" value="{{editStock}}" bindinput="onEditStockInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">分类</text>
+      <picker range="{{['food', 'health', 'service', 'coupon', 'other']}}" value="{{editCategory}}" bindchange="onEditCategoryChange">
+        <view class="form-input picker-value">{{editCategory === 'food' ? '美食' : editCategory === 'health' ? '健康' : editCategory === 'service' ? '服务' : editCategory === 'coupon' ? '优惠券' : '其他'}}</view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <text class="form-label">描述</text>
+      <textarea class="form-textarea" placeholder="请输入礼品描述" value="{{editDescription}}" bindinput="onEditDescriptionInput" auto-height />
+    </view>
+    <view class="form-group">
+      <text class="form-label">现金价格</text>
+      <input class="form-input" type="digit" placeholder="请输入现金价格" value="{{editCashPrice}}" bindinput="onEditCashPriceInput" />
+    </view>
+    <view class="btn-group">
+      <button class="btn btn-primary" bindtap="onConfirmEdit" hover-class="btn-hover">保存</button>
+      <button class="btn btn-secondary" bindtap="onCancelEdit" hover-class="btn-hover">取消</button>
+    </view>
+  </view>
+</view>

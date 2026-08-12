@@ -1,0 +1,159 @@
+/* pages/user/questionnaire/questionnaire.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+}
+
+/* 查看上次评估结果入口 */
+.result-entry {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background-color: #e8f5e9;
+  border-left: 6rpx solid #4CAF50;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.result-entry-text {
+  flex: 1;
+}
+
+.result-entry-title {
+  font-size: 18px;
+  color: #333;
+  display: block;
+  font-weight: 500;
+}
+
+.result-entry-desc {
+  font-size: 18px;
+  color: #666;
+  display: block;
+  margin-top: 4rpx;
+}
+
+.result-entry-arrow {
+  font-size: 24px;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.progress-bar {
+  background-color: white;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.progress-fill {
+  height: 8rpx;
+  background: linear-gradient(to right, #4CAF50, #66BB6A);
+  border-radius: 4rpx;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  display: block;
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 10rpx;
+}
+
+.questions {
+  margin-top: 30rpx;
+}
+
+.question-item {
+  margin-bottom: 40rpx;
+}
+
+.question-label {
+  font-size: 18px;
+  color: #333;
+  display: block;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.form-input {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 24rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 18px;
+  background-color: white;
+}
+
+.picker {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 24rpx;
+  background-color: white;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.picker-arrow {
+  font-size: 18px;
+  color: #666;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  font-size: 18px;
+}
+
+.checkbox-item checkbox {
+  margin-right: 12rpx;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40rpx;
+}
+
+.btn-group .btn {
+  flex: 1;
+  margin: 0 8rpx;
+}
+
+/* 规格12.1：隐私授权同意勾选区 */
+.consent-section {
+  margin-top: 30rpx;
+  padding: 24rpx;
+  background-color: #fff9e6;
+  border-radius: 12rpx;
+  border-left: 6rpx solid #FFB74D;
+}
+
+.consent-label {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.consent-label checkbox {
+  margin-right: 12rpx;
+  transform: scale(1.2);
+}
+
+.consent-link {
+  color: #1976D2;
+  text-decoration: underline;
+}

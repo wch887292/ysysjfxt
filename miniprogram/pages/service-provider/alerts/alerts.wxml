@@ -1,0 +1,55 @@
+<!--pages/service-provider/alerts/alerts.wxml-->
+<view class="container">
+  <!-- 预警卡片列表 -->
+  <view class="alert-list">
+    <view class="alert-card" wx:for="{{alerts}}" wx:key="id" hover-class="card-hover">
+      <view class="alert-header">
+        <text class="user-name">{{item.userName}}</text>
+        <text class="alert-badge">{{item.alertTypeText}}</text>
+      </view>
+
+      <view class="alert-meta">
+        <text class="meta-item">⏱ 不活跃 {{item.inactiveDays}} 天</text>
+        <text class="meta-item">🕐 {{item.createdAt}}</text>
+      </view>
+
+      <view class="alert-action">
+        <button class="btn-follow" data-id="{{item.id}}" bindtap="onFollowUpTap"
+          hover-class="btn-hover">跟进</button>
+      </view>
+    </view>
+
+    <view wx:if="{{alerts.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-icon">🔔</text>
+      <text>暂无待跟进预警</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-state">
+      <text>加载中...</text>
+    </view>
+
+    <view wx:if="{{!hasMore && alerts.length > 0 && !loading}}" class="end-tip">
+      <text>— 已全部加载 —</text>
+    </view>
+  </view>
+
+  <!-- 跟进表单弹窗 -->
+  <view wx:if="{{showFollowUp}}" class="modal-mask" bindtap="cancelFollowUp">
+    <view class="modal-content" catchtap="">
+      <text class="modal-title">跟进预警</text>
+
+      <text class="label">跟进结果</text>
+      <textarea class="textarea" placeholder="请输入跟进结果"
+        value="{{followUpResult}}" bindinput="onFollowUpInput" maxlength="500"
+        focus="{{showFollowUp}}" />
+
+      <view class="modal-buttons">
+        <button class="btn-cancel" bindtap="cancelFollowUp" hover-class="btn-hover">取消</button>
+        <button class="btn-confirm" loading="{{submitting}}" disabled="{{submitting}}"
+          bindtap="submitFollowUp" hover-class="btn-hover">
+          {{submitting ? '提交中...' : '确认提交'}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

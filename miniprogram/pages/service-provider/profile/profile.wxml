@@ -1,0 +1,76 @@
+<!--pages/service-provider/profile/profile.wxml-->
+<view class="container">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{provider}}">
+    <!-- 信息展示模式 -->
+    <view wx:if="{{!editing}}" class="card profile-card">
+      <view class="profile-header">
+        <text class="profile-title">{{provider.name || '未命名网点'}}</text>
+        <view class="badge-row">
+          <text class="status-badge status-{{provider.status}}">{{statusMap[provider.status] || provider.status}}</text>
+          <text wx:if="{{provider.verified}}" class="verify-badge">✓ 已认证</text>
+        </view>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">联系电话</text>
+        <text class="info-value">{{provider.phoneMasked || provider.phone || '未填写'}}</text>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">邮箱</text>
+        <text class="info-value">{{provider.email || '未填写'}}</text>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">地址</text>
+        <text class="info-value">{{provider.address || '未填写'}}</text>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">营业执照号</text>
+        <text class="info-value">{{provider.licenseNumber || '未填写'}}</text>
+      </view>
+
+      <button class="btn-edit" bindtap="toggleEdit" hover-class="btn-hover">编辑信息</button>
+    </view>
+
+    <!-- 编辑表单模式 -->
+    <view wx:if="{{editing}}" class="card form-card">
+      <text class="form-title">编辑网点信息</text>
+
+      <text class="label">网点名称</text>
+      <input class="input" placeholder="请输入网点名称（2-100字）"
+        value="{{formData.name}}" bindinput="onNameInput" maxlength="100" />
+
+      <text class="label mt">联系电话</text>
+      <input class="input" type="number" placeholder="请输入11位手机号（选填）"
+        value="{{formData.phone}}" bindinput="onPhoneInput" maxlength="11" />
+
+      <text class="label mt">邮箱</text>
+      <input class="input" placeholder="请输入邮箱（选填）"
+        value="{{formData.email}}" bindinput="onEmailInput" />
+
+      <text class="label mt">地址</text>
+      <textarea class="textarea" placeholder="请输入地址（不超过200字，选填）"
+        value="{{formData.address}}" bindinput="onAddressInput" maxlength="200" />
+
+      <button class="btn-submit" loading="{{submitting}}" disabled="{{submitting}}"
+        bindtap="submitUpdate" hover-class="btn-hover">
+        {{submitting ? '更新中...' : '确认更新'}}
+      </button>
+
+      <button class="btn-cancel" bindtap="toggleEdit" hover-class="btn-hover">取消</button>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-state">
+    <text class="empty-icon">📋</text>
+    <text>暂无网点信息</text>
+  </view>
+</view>

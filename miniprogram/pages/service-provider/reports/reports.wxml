@@ -1,0 +1,44 @@
+<!--pages/service-provider/reports/reports.wxml-->
+<view class="container">
+  <!-- 客户信息头 -->
+  <view class="card header-card">
+    <text class="header-title">客户报告</text>
+    <view class="header-info">
+      <text class="info-label">客户ID：</text>
+      <text class="info-value">{{userId || '未指定'}}</text>
+    </view>
+  </view>
+
+  <!-- 报告列表 -->
+  <view class="report-list">
+    <view class="report-card" wx:for="{{reports}}" wx:key="id" hover-class="card-hover">
+      <view class="report-header">
+        <text class="report-title">{{item.title}}</text>
+        <text class="type-badge type-{{item.reportType}}">{{item.reportTypeText}}</text>
+      </view>
+
+      <view class="report-meta">
+        <text class="meta-item">📅 生成日期：{{item.generateDate}}</text>
+        <text wx:if="{{item.riskLevel}}" class="meta-item risk-{{item.riskLevel}}">风险等级：{{item.riskLevel}}</text>
+      </view>
+
+      <view wx:if="{{item.content}}" class="report-content">
+        <text>{{item.content}}</text>
+      </view>
+
+      <button class="btn-download" data-id="{{item.id}}" bindtap="downloadReport"
+        loading="{{downloading}}" disabled="{{downloading}}" hover-class="btn-hover">
+        📥 下载报告
+      </button>
+    </view>
+
+    <view wx:if="{{reports.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-icon">📄</text>
+      <text>暂无客户报告</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-state">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

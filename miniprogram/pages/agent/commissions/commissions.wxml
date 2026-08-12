@@ -1,0 +1,65 @@
+<!--pages/agent/commissions/commissions.wxml-->
+<view class="container">
+  <!-- 汇总卡片 -->
+  <view class="summary-row">
+    <view class="summary-card">
+      <text class="summary-label">待结算</text>
+      <text class="summary-amount">¥{{summary.pendingTotal}}</text>
+    </view>
+    <view class="summary-card">
+      <text class="summary-label">已结算</text>
+      <text class="summary-amount">¥{{summary.settledTotal}}</text>
+    </view>
+    <view class="summary-card">
+      <text class="summary-label">总计</text>
+      <text class="summary-amount">¥{{summary.allTotal}}</text>
+    </view>
+  </view>
+
+  <!-- 状态筛选 -->
+  <view class="tab-bar">
+    <view class="tab-item {{statusFilter === item.value ? 'tab-active' : ''}}"
+      wx:for="{{statusTabs}}" wx:key="value"
+      data-status="{{item.value}}" bindtap="switchTab"
+      hover-class="tab-hover">
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 分润列表 -->
+  <view class="commission-list" wx:if="{{commissions.length > 0}}">
+    <view class="commission-item" wx:for="{{commissions}}" wx:key="id" hover-class="item-hover">
+      <view class="item-header">
+        <text class="item-source">{{item.sourceLabel}}</text>
+        <text class="status-badge status-{{item.status}}">{{item.statusLabel}}</text>
+      </view>
+      <view class="item-user">
+        <text class="item-name">{{item.userName}}</text>
+        <text class="item-phone" wx:if="{{item.phone}}">{{item.phone}}</text>
+      </view>
+      <view class="item-footer">
+        <text class="item-period">{{item.period}}</text>
+        <text class="item-amount">¥{{item.amount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:elif="{{!loading}}">
+    <text class="empty-icon">💰</text>
+    <text class="empty-text">暂无分润记录</text>
+  </view>
+
+  <!-- 首次加载 -->
+  <view class="loading-tip" wx:if="{{loading && commissions.length === 0}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 底部加载更多 -->
+  <view class="bottom-tip" wx:if="{{commissions.length > 0 && loading}}">
+    <text>加载中...</text>
+  </view>
+  <view class="bottom-tip" wx:if="{{commissions.length > 0 && !hasMore && !loading}}">
+    <text>没有更多了</text>
+  </view>
+</view>

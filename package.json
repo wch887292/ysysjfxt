@@ -1,0 +1,20 @@
+{
+  "name": "diet-points-system",
+  "version": "1.0.0",
+  "description": "健康饮食积分系统微信小程序",
+  "main": "server/app.js",
+  "scripts": {
+    "test": "cd server && node tests/sim-smoke.test.js"
+  },
+  "keywords": [
+    "miniprogram",
+    "wechat",
+    "diet",
+    "health",
+    "points"
+  ],
+  "author": "Your Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

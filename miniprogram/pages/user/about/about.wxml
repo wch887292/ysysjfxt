@@ -1,0 +1,29 @@
+<view class="container">
+  <view class="logo-section">
+    <view class="logo">🥗</view>
+    <text class="app-name">元生AI生态健康饮食积分系统</text>
+    <text class="app-version">版本 {{version}}</text>
+  </view>
+
+  <view class="content-card">
+    <view class="doc-h2">产品介绍</view>
+    <text class="doc-p">元生AI生态健康饮食积分系统是一个集健康评估、AI饮食建议、积分激励、线下服务于一体的一站式健康管理平台。</text>
+    <text class="doc-p">通过AI技术分析您的健康状况，生成个性化饮食改善方案，结合积分激励机制和线下服务网络，帮助您养成健康的饮食习惯。</text>
+  </view>
+
+  <view class="content-card">
+    <view class="doc-h2">核心功能</view>
+    <text class="doc-p">🎯 AI健康评估：个性化饮食风险分析</text>
+    <text class="doc-p">📋 每日打卡：图标打卡与拍照打卡</text>
+    <text class="doc-p">🏅 荣誉体系：等级勋章与惊喜激励</text>
+    <text class="doc-p">🎁 积分商城：积分兑换健康好礼</text>
+    <text class="doc-p">👴 适老设计：大字体大按钮，简单易用</text>
+  </view>
+
+  <view class="disclaimer">
+    <text>本系统为饮食与生活方式建议工具，不能替代任何医疗诊断、治疗及医嘱。所有健康决策应咨询专业医师。</text>
+  </view>
+
+  <!-- ICP 备案号 -->
+  <icp-footer></icp-footer>
+</view>

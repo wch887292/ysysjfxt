@@ -1,0 +1,81 @@
+<!--pages/user/points/points.wxml-->
+<wxs module="util">
+function formatTime(str) {
+  if (!str) return '';
+  // 兼容 "2026-07-30T10:00:00.000Z" 和 "2026-07-30 10:00:00" 两种格式
+  var d = str.replace('T', ' ').substring(0, 16);
+  return d;
+}
+function formatPoints(type, points) {
+  // deductPoints 存负数，需取绝对值后加符号
+  var abs = points < 0 ? -points : points;
+  if (type === 'earn') return '+' + abs;
+  return '-' + abs;
+}
+module.exports = { formatTime: formatTime, formatPoints: formatPoints };
+</wxs>
+
+<view class="container">
+  <!-- 荣誉等级卡片 -->
+  <view class="honor-card">
+    <view class="honor-level">
+      <text class="honor-icon">🏆</text>
+      <view class="honor-info">
+        <text class="honor-title">{{honorLevelName}}</text>
+        <text class="honor-subtitle">当前荣誉等级</text>
+      </view>
+    </view>
+    <view wx:if="{{badges.length > 0}}" class="badges-row">
+      <text class="badges-label">已获勋章：</text>
+      <text wx:for="{{badges}}" wx:key="*this" class="badge-chip">{{item}}</text>
+    </view>
+    <view wx:else class="badges-empty">
+      <text class="badges-empty-text">暂无勋章，继续努力获取勋章吧</text>
+    </view>
+  </view>
+
+  <!-- 积分卡片 -->
+  <view class="card points-card">
+    <view class="points-header">
+      <text class="points-label">当前积分</text>
+      <text class="points-value">{{points}}</text>
+    </view>
+  </view>
+
+  <!-- 礼品兑换入口 -->
+  <view class="card exchange-entry-card" catchtap="navigateToExchange" hover-class="card-hover" hover-stay-time="100">
+    <view class="entry-icon">🎁</view>
+    <view class="entry-content">
+      <view class="entry-title">礼品商城</view>
+      <view class="entry-desc">用积分兑换健康好礼</view>
+    </view>
+    <view class="entry-arrow">›</view>
+  </view>
+
+  <!-- 积分历史 -->
+  <view class="card">
+    <text class="subtitle">积分记录</text>
+    <view class="history-list" wx:if="{{pointsHistory.length > 0}}">
+      <view class="history-item" wx:for="{{pointsHistory}}" wx:key="id">
+        <view class="history-icon">
+          <text>{{item.type === 'earn' ? '➕' : '➖'}}</text>
+        </view>
+        <view class="history-content">
+          <text class="history-desc">{{item.description || item.source}}</text>
+          <text class="history-time">{{util.formatTime(item.createdAt || item.created_at)}}</text>
+        </view>
+        <text class="history-points {{item.type === 'earn' ? 'earn' : 'spend'}}">
+          {{util.formatPoints(item.type, item.points)}}
+        </text>
+      </view>
+    </view>
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">📝</text>
+      <text>暂无积分记录，完成打卡、签到即可获取积分</text>
+      <button class="btn btn-primary empty-action-btn" bindtap="goClockIn">去打卡</button>
+    </view>
+  </view>
+
+  <!-- ICP 备案号 -->
+  <icp-footer tabbar="{{true}}"></icp-footer>
+</view>

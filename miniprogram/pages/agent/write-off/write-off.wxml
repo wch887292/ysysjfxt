@@ -1,0 +1,52 @@
+<!--pages/agent/write-off/write-off.wxml-->
+<view class="container">
+  <view class="card">
+    <text class="title">积分核销</text>
+    <text class="subtitle">为名下会员核销积分（线下礼品兑换）</text>
+  </view>
+
+  <view class="card">
+    <text class="label">选择会员</text>
+    <picker mode="selector" range="{{userList}}" range-key="nickName" bindchange="onUserChange">
+      <view class="picker-box">
+        <text wx:if="{{selectedUser}}" class="picker-text">{{selectedUser.nickName}}（{{selectedUser.phone || '无手机号'}}）</text>
+        <text wx:else class="picker-placeholder">{{loadingUsers ? '加载中...' : '请选择名下会员'}}</text>
+      </view>
+    </picker>
+    <view wx:if="{{selectedUser}}" class="user-points">
+      当前可用积分：<text class="points-num">{{selectedUser.points}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="label">核销积分</text>
+    <input class="input" type="number" placeholder="请输入正整数积分" value="{{points}}" bindinput="onPointsInput" />
+
+    <text class="label mt">礼品 / 核销说明</text>
+    <input class="input" placeholder="如：线下礼品兑换-食用油1桶" value="{{giftDescription}}" bindinput="onGiftInput" maxlength="200" />
+
+    <text class="label mt">备注（选填）</text>
+    <textarea class="textarea" placeholder="备注信息（选填）" value="{{remark}}" bindinput="onRemarkInput" maxlength="500" />
+  </view>
+
+  <view wx:if="{{result}}" class="card result-card">
+    <text class="result-title">{{result.duplicated ? '已核销（重复提交，幂等返回）' : '核销成功'}}</text>
+    <view class="result-row">
+      <text class="result-key">核销后余额</text>
+      <text class="result-num">{{result.newBalance}}</text>
+    </view>
+    <view class="result-row">
+      <text class="result-key">核销单号</text>
+      <text class="result-val">{{result.writeOffId}}</text>
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="btn-reset" bindtap="resetForm">重置</button>
+    <button class="btn-submit" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">
+      {{submitting ? '核销中...' : '确认核销'}}
+    </button>
+  </view>
+
+  <view class="tip">提交后请勿连续点击；若提示超时请稍后再点，系统已做幂等保护，不会重复扣积分。</view>
+</view>

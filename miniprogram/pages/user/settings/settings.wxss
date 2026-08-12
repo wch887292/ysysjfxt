@@ -1,0 +1,64 @@
+/* pages/user/settings/settings.wxss */
+.container {
+  padding: 32rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.form-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 16rpx 32rpx;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 0;
+  border-bottom: 1rpx solid #eeeeee;
+  min-height: 96rpx;
+  box-sizing: border-box;
+}
+
+.form-label {
+  width: 160rpx;
+  font-size: 36rpx;
+  color: #333333;
+  flex-shrink: 0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 36rpx;
+  color: #333333;
+  height: 96rpx;
+  line-height: 96rpx;
+}
+
+.form-tip {
+  padding: 24rpx 0;
+  font-size: 36rpx;
+  color: #666666;
+  line-height: 1.8;
+}
+
+.save-btn {
+  margin-top: 48rpx;
+  height: 96rpx;
+  line-height: 96rpx;
+  background: #4CAF50;
+  color: #ffffff;
+  font-size: 40rpx;
+  border-radius: 16rpx;
+}
+
+.clear-btn {
+  margin-top: 32rpx;
+  height: 96rpx;
+  line-height: 96rpx;
+  background: #ffffff;
+  color: #F44336;
+  font-size: 40rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid #F44336;
+}

@@ -1,0 +1,59 @@
+<!--pages/user/articles/articles.wxml-->
+<view class="container">
+  <!-- 分类标签 -->
+  <view class="category-tabs">
+    <view
+      class="tab-item {{currentCategory === '' ? 'active' : ''}}"
+      data-category=""
+      bindtap="onCategoryChange"
+    >全部</view>
+    <view
+      wx:for="{{categories}}"
+      wx:key="*this"
+      wx:if="{{item}}"
+      class="tab-item {{currentCategory === item ? 'active' : ''}}"
+      data-category="{{item}}"
+      bindtap="onCategoryChange"
+    >{{categoryLabels[item]}}</view>
+  </view>
+
+  <!-- 资讯列表 -->
+  <view class="article-list" wx:if="{{articles.length > 0}}">
+    <view
+      wx:for="{{articles}}"
+      wx:key="id"
+      class="article-card"
+      data-id="{{item.id}}"
+      bindtap="onArticleTap"
+      hover-class="article-card-hover"
+    >
+      <image
+        wx:if="{{item.cover_image}}"
+        class="article-cover"
+        src="{{item.cover_image}}"
+        mode="aspectFill"
+        data-id="{{item.id}}"
+        binderror="onImageError"
+      />
+      <view class="article-body">
+        <view class="article-title">{{item.title}}</view>
+        <view class="article-summary" wx:if="{{item.summary}}">{{item.summary}}</view>
+        <view class="article-meta">
+          <text class="meta-tag">{{item.categoryLabel}}</text>
+          <text class="meta-date">{{item.publishedAt}}</text>
+          <text class="meta-views">{{item.view_count || 0}}次浏览</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+  <view wx:elif="{{!hasMore && articles.length > 0}}" class="loading-tip">没有更多了</view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{!loading && articles.length === 0}}" class="empty-state">
+    <text class="empty-icon">📰</text>
+    <text>暂无资讯</text>
+  </view>
+</view>
